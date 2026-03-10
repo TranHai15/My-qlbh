@@ -1,0 +1,12 @@
+plugins {
+    id 'application'
+}
+
+application {
+    mainClass = project.hasProperty('mainClass') ? project.getProperty('mainClass') : 'com.grocerypos.core.LoginTester'
+}
+
+dependencies {
+    implementation "com.google.zxing:core:${zxingVersion}"
+    implementation "com.google.zxing:javase:${zxingVersion}"
+}

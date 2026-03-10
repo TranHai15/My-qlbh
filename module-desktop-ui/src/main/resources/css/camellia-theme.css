@@ -1,0 +1,73 @@
+/* camellia-theme.css - Cảm hứng Hoa Anh Đào Nhật Bản */
+
+.root {
+    -fx-primary-pink: #FFB7C5;        /* Hồng anh đào */
+    -fx-secondary-pink: #FFD1DC;
+    -fx-accent-pink: #D83367;         /* Hồng đậm điểm nhấn */
+    -fx-bg-cream: #FFF9F9;            /* Trắng kem */
+    -fx-text-main: #5D4037;           /* Nâu gỗ đậm cho chữ */
+    -fx-white: #FFFFFF;
+}
+
+/* Kiểu chữ tiêu đề */
+.app-title {
+    -fx-font-family: "System";
+    -fx-font-weight: bold;
+    -fx-font-size: 36px;
+    -fx-text-fill: -fx-accent-pink;
+}
+
+/* Card Container */
+.card {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(216, 51, 103, 0.15), 15, 0, 0, 5);
+}
+
+/* Input Fields */
+.text-input {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 10;
+    -fx-border-color: -fx-secondary-pink;
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-padding: 10;
+}
+
+.text-input:focused {
+    -fx-border-color: -fx-accent-pink;
+    -fx-border-width: 1.5;
+}
+
+/* Button chính (Màu hồng anh đào) */
+.btn-primary {
+    -fx-background-color: linear-gradient(to right, #FFB7C5, #FFD1DC);
+    -fx-text-fill: -fx-text-main;
+    -fx-background-radius: 25;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to right, #FFB7C5, #D83367);
+    -fx-text-fill: white;
+}
+
+/* Button Menu (Dạng Card lớn) */
+.btn-menu {
+    -fx-background-color: -fx-white;
+    -fx-background-radius: 20;
+    -fx-padding: 30;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);
+}
+
+.btn-menu:hover {
+    -fx-background-color: -fx-secondary-pink;
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.icon-label {
+    -fx-font-size: 50px;
+}

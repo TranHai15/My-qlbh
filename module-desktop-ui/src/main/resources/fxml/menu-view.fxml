@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<VBox alignment="TOP_CENTER" spacing="40.0" prefWidth="900.0" prefHeight="700.0" 
+      style="-fx-background-color: #FFF9F9;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.MenuController">
+    
+    <stylesheets>
+        <URL value="@../css/camellia-theme.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" prefWidth="Infinity">
+        <VBox spacing="5.0">
+            <Label text="Camellia" styleClass="app-title" style="-fx-font-size: 28;"/>
+            <Label fx:id="welcomeLabel" text="Chào buổi sáng, Admin &#x1F338;" textFill="#A88181" />
+        </VBox>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Đăng xuất" onAction="#handleLogout" 
+                style="-fx-background-color: transparent; -fx-text-fill: #D83367; -fx-cursor: hand; -fx-font-weight: bold;" />
+    </HBox>
+
+    <Separator />
+
+    <Label text="Chọn dịch vụ bạn muốn thực hiện" textFill="#5D4037">
+        <font><Font name="System Bold" size="20.0" /></font>
+    </Label>
+
+    <HBox alignment="CENTER" spacing="50.0" VBox.vgrow="ALWAYS">
+        <!-- Card Bán Hàng -->
+        <Button onAction="#goToPOS" styleClass="btn-menu" prefWidth="300.0" prefHeight="350.0">
+            <graphic>
+                <VBox alignment="CENTER" spacing="20.0">
+                    <Label text="&#x1F6D2;" styleClass="icon-label"/>
+                    <VBox alignment="CENTER" spacing="10.0">
+                        <Label text="BÁN HÀNG" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #5D4037;"/>
+                        <Label text="Máy tính tiền &amp; In hóa đơn" textFill="#7F8C8D" />
+                    </VBox>
+                </VBox>
+            </graphic>
+        </Button>
+
+        <!-- Card Quản Lý -->
+        <Button onAction="#goToManagement" styleClass="btn-menu" prefWidth="300.0" prefHeight="350.0">
+            <graphic>
+                <VBox alignment="CENTER" spacing="20.0">
+                    <Label text="&#x1F4E6;" styleClass="icon-label"/>
+                    <VBox alignment="CENTER" spacing="10.0">
+                        <Label text="QUẢN LÝ KHO" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #5D4037;"/>
+                        <Label text="Sản phẩm, Kho &amp; Báo cáo" textFill="#7F8C8D" />
+                    </VBox>
+                </VBox>
+            </graphic>
+        </Button>
+    </HBox>
+    
+    <Label text="Phiên bản 1.0.0 | Camellia Japanese Style" textFill="#D1D1D1" />
+</VBox>

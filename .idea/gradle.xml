@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="21" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/module-core" />
+            <option value="$PROJECT_DIR$/module-customer" />
+            <option value="$PROJECT_DIR$/module-desktop-ui" />
+            <option value="$PROJECT_DIR$/module-inventory" />
+            <option value="$PROJECT_DIR$/module-order" />
+            <option value="$PROJECT_DIR$/module-product" />
+            <option value="$PROJECT_DIR$/module-promotion" />
+            <option value="$PROJECT_DIR$/module-report" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

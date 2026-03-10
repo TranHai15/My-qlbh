@@ -1,0 +1,25 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+javafx {
+    version = "21"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.swing']
+}
+
+application {
+    mainClass = 'com.grocerypos.ui.Launcher'
+}
+
+dependencies {
+    implementation project(':module-core')
+}
+
+// Cách đúng để lấy đường dẫn thư viện JavaFX trong Gradle hiện đại
+run {
+    doFirst {
+        def jfxLibs = configurations.runtimeClasspath.filter { it.name.contains('javafx') }
+        jvmArgs += ["--module-path", jfxLibs.asPath, "--add-modules", "javafx.controls,javafx.fxml,javafx.graphics,javafx.swing"]
+    }
+}

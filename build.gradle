@@ -1,0 +1,71 @@
+plugins {
+    id 'org.openjfx.javafxplugin' version '0.1.0' apply false
+}
+
+allprojects {
+    group   = 'com.grocerypos'
+    version = '1.0.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+        toolchain { languageVersion = JavaLanguageVersion.of(21) }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    // === Versions (thay đổi ở đây, áp dụng cho tất cả modules) ===
+    ext {
+        sqliteVersion   = '3.45.1.0'
+        hikariVersion   = '5.1.0'
+        guavaVersion    = '33.1.0-jre'
+        bcryptVersion   = '0.4'
+        lombokVersion   = '1.18.32'
+        slf4jVersion    = '2.0.12'
+        logbackVersion  = '1.5.3'
+        junitVersion    = '5.10.2'
+        mockitoVersion  = '5.11.0'
+        zxingVersion    = '3.5.3'
+    }
+
+    dependencies {
+        // SQLite
+        implementation "org.xerial:sqlite-jdbc:${sqliteVersion}"
+
+        // HikariCP connection pool
+        implementation "com.zaxxer:HikariCP:${hikariVersion}"
+
+        // Guava EventBus
+        implementation "com.google.guava:guava:${guavaVersion}"
+
+        // BCrypt
+        implementation "org.mindrot:jbcrypt:${bcryptVersion}"
+
+        // Logging
+        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+        implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
+        // Lombok
+        compileOnly     "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        // Test
+        testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+        testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+        testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+}

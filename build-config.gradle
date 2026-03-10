@@ -1,0 +1,201 @@
+// ============================================================
+// ROOT build.gradle — GroceryPOS
+// ============================================================
+plugins {
+    id 'java' apply false
+    id 'org.openjfx.javafxplugin' version '0.1.0' apply false
+}
+
+allprojects {
+    group   = 'com.grocerypos'
+    version = '1.0.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        toolchain { languageVersion = JavaLanguageVersion.of(17) }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    // === Versions (thay đổi ở đây, áp dụng cho tất cả modules) ===
+    ext {
+        sqliteVersion   = '3.45.1.0'
+        hikariVersion   = '5.1.0'
+        guavaVersion    = '33.1.0-jre'
+        bcryptVersion   = '0.4'
+        lombokVersion   = '1.18.32'
+        slf4jVersion    = '2.0.12'
+        logbackVersion  = '1.5.3'
+        junitVersion    = '5.10.2'
+        mockitoVersion  = '5.11.0'
+        zxingVersion    = '3.5.3'
+    }
+
+    dependencies {
+        // SQLite
+        implementation "org.xerial:sqlite-jdbc:${sqliteVersion}"
+
+        // HikariCP connection pool
+        implementation "com.zaxxer:HikariCP:${hikariVersion}"
+
+        // Guava EventBus
+        implementation "com.google.guava:guava:${guavaVersion}"
+
+        // BCrypt
+        implementation "org.mindrot:jbcrypt:${bcryptVersion}"
+
+        // Logging
+        implementation "org.slf4j:slf4j-api:${slf4jVersion}"
+        implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+
+        // Lombok
+        compileOnly     "org.projectlombok:lombok:${lombokVersion}"
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+        // Test
+        testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+        testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+        testImplementation "org.mockito:mockito-junit-jupiter:${mockitoVersion}"
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+    }
+}
+
+// ============================================================
+// settings.gradle — GroceryPOS
+// ============================================================
+/*
+rootProject.name = 'GroceryPOS'
+
+include 'module-core'
+include 'module-product'
+include 'module-customer'
+include 'module-inventory'
+include 'module-promotion'
+include 'module-order'
+include 'module-report'
+include 'module-desktop-ui'
+*/
+
+// ============================================================
+// module-core/build.gradle
+// ============================================================
+/*
+dependencies {
+    implementation "com.google.zxing:core:${zxingVersion}"
+    implementation "com.google.zxing:javase:${zxingVersion}"
+    // Không có dependencies nội bộ — đây là base module
+}
+*/
+
+// ============================================================
+// module-product/build.gradle
+// ============================================================
+/*
+dependencies {
+    implementation project(':module-core')
+}
+*/
+
+// ============================================================
+// module-customer/build.gradle
+// ============================================================
+/*
+dependencies {
+    implementation project(':module-core')
+}
+*/
+
+// ============================================================
+// module-inventory/build.gradle
+// ============================================================
+/*
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-product')  // để gọi updateStock()
+}
+*/
+
+// ============================================================
+// module-promotion/build.gradle
+// ============================================================
+/*
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-product')  // để check product trong rules
+}
+*/
+
+// ============================================================
+// module-order/build.gradle
+// ============================================================
+/*
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-product')
+    implementation project(':module-customer')
+    implementation project(':module-promotion')
+}
+*/
+
+// ============================================================
+// module-report/build.gradle
+// ============================================================
+/*
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-order')
+    implementation project(':module-product')
+    implementation project(':module-customer')
+}
+*/
+
+// ============================================================
+// module-desktop-ui/build.gradle
+// ============================================================
+/*
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin'
+}
+
+javafx {
+    version = "17"
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics', 'javafx.swing']
+}
+
+application {
+    mainClass = 'com.grocerypos.ui.MainApp'
+}
+
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-product')
+    implementation project(':module-customer')
+    implementation project(':module-inventory')
+    implementation project(':module-promotion')
+    implementation project(':module-order')
+    implementation project(':module-report')
+    implementation "com.google.zxing:javase:${zxingVersion}"
+}
+
+// Fat JAR để deploy
+jar {
+    manifest { attributes 'Main-Class': 'com.grocerypos.ui.MainApp' }
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+*/
