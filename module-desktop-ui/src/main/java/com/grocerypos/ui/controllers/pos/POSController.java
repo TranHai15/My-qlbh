@@ -269,11 +269,22 @@ public class POSController extends BaseController {
                 barcodeField.requestFocus();
             });
             Stage stage = new Stage();
-            stage.setTitle("Khách hàng");
+            stage.setTitle("Quản lý khách hàng");
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
-            stage.setScene(new javafx.scene.Scene(root));
+            
+            // Đặt kích thước Scene khớp với prefWidth/Height trong FXML (900x650)
+            javafx.scene.Scene scene = new javafx.scene.Scene(root, 900, 650);
+            stage.setScene(scene);
+            
+            // Chống việc cửa sổ bị co lại quá nhỏ
+            stage.setMinWidth(800);
+            stage.setMinHeight(500);
+            
             stage.show();
-        } catch (Exception e) { AlertHelper.showError("Lỗi", e.getMessage()); }
+        } catch (Exception e) { 
+            e.printStackTrace(); // Hiện lỗi chi tiết ra console
+            AlertHelper.showError("Lỗi", "Không thể mở cửa sổ tìm khách hàng: " + e.getMessage()); 
+        }
     }
 
     @FXML

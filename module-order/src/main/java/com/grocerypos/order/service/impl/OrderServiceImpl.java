@@ -160,6 +160,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void updateOrderNotes(Long id, String notes) {
+        orderRepo.updateNotes(id, notes);
+    }
+
+    @Override
     public List<OrderItem> getOrderItems(Long orderId) {
         return orderItemRepo.findByOrderId(orderId);
     }

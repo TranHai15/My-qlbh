@@ -5,43 +5,40 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="10.0" prefWidth="600.0" prefHeight="500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grocerypos.ui.controllers.pos.CustomerSearchController" style="-fx-background-color: white;">
+<VBox spacing="15.0" prefWidth="900.0" prefHeight="650.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grocerypos.ui.controllers.pos.CustomerSearchController" style="-fx-background-color: white;">
     <padding>
-        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label text="TÌM KIẾM / ĐĂNG KÝ KHÁCH HÀNG">
-        <font><Font name="System Bold" size="18.0"/></font>
-    </Label>
+    <Label text="QUẢN LÝ &amp; CHỌN KHÁCH HÀNG" style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
-    <HBox spacing="10.0" alignment="CENTER_LEFT">
-        <TextField fx:id="searchField" promptText="Nhập tên hoặc số điện thoại..." HBox.hgrow="ALWAYS" prefHeight="35.0" style="-fx-font-size: 14px;"/>
-        <Button text="Tìm kiếm" onAction="#handleSearch" prefHeight="35.0" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+    <HBox spacing="15.0" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Nhập tên hoặc số điện thoại khách hàng..." HBox.hgrow="ALWAYS" prefHeight="45.0" style="-fx-font-size: 16px;"/>
+        <Button text="🔍 TÌM KIẾM" onAction="#handleSearch" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
 
-    <TableView fx:id="customerTable" VBox.vgrow="ALWAYS">
+    <TableView fx:id="customerTable" VBox.vgrow="ALWAYS" style="-fx-font-size: 14px;">
         <columns>
-            <TableColumn fx:id="colName" text="Tên khách hàng" prefWidth="200.0"/>
+            <TableColumn fx:id="colName" text="Họ và tên" prefWidth="250.0"/>
             <TableColumn fx:id="colPhone" text="Số điện thoại" prefWidth="150.0"/>
             <TableColumn fx:id="colPoints" text="Điểm tích lũy" prefWidth="120.0"/>
+            <TableColumn fx:id="colAddress" text="Địa chỉ" prefWidth="320.0"/>
         </columns>
     </TableView>
 
     <Separator />
     
-    <VBox spacing="5.0">
-        <Label text="Đăng ký khách hàng mới nhanh:">
-            <font><Font name="System Italic" size="12.0"/></font>
-        </Label>
-        <HBox spacing="10.0">
-            <TextField fx:id="newNameField" promptText="Họ và tên..." HBox.hgrow="ALWAYS" prefHeight="35.0"/>
-            <TextField fx:id="newPhoneField" promptText="Số điện thoại..." HBox.hgrow="ALWAYS" prefHeight="35.0"/>
-            <Button text="+ THÊM MỚI" onAction="#handleQuickAdd" prefHeight="35.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <VBox spacing="10.0" style="-fx-background-color: #f8f9fa; -fx-padding: 15; -fx-background-radius: 5; -fx-border-color: #dee2e6; -fx-border-radius: 5;">
+        <Label text="Đăng ký khách hàng mới nhanh:" style="-fx-font-weight: bold; -fx-font-style: italic;"/>
+        <HBox spacing="15.0">
+            <TextField fx:id="newNameField" promptText="Tên khách hàng mới..." HBox.hgrow="ALWAYS" prefHeight="40.0" style="-fx-font-size: 14px;"/>
+            <TextField fx:id="newPhoneField" promptText="Số điện thoại..." HBox.hgrow="ALWAYS" prefHeight="40.0" style="-fx-font-size: 14px;"/>
+            <Button text="+ THÊM &amp; CHỌN LUÔN" onAction="#handleQuickAdd" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold;"/>
         </HBox>
     </VBox>
 
-    <HBox spacing="10.0" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
-        <Button text="Hủy bỏ" onAction="#handleCancel" prefWidth="100.0" prefHeight="35.0"/>
-        <Button text="CHỌN KHÁCH HÀNG (Enter)" onAction="#handleSelect" prefWidth="220.0" prefHeight="35.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    <HBox spacing="15.0" alignment="CENTER_RIGHT" style="-fx-padding: 10 0 0 0;">
+        <Button text="Đóng (Esc)" onAction="#handleCancel" prefWidth="120.0" prefHeight="45.0" style="-fx-font-size: 14px;"/>
+        <Button text="XÁC NHẬN CHỌN (Enter)" onAction="#handleSelect" prefWidth="280.0" prefHeight="45.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 16px;"/>
     </HBox>
 </VBox>

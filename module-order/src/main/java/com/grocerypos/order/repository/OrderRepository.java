@@ -34,6 +34,11 @@ public class OrderRepository extends BaseRepository {
         return order;
     }
 
+    public void updateNotes(Long id, String notes) {
+        String sql = "UPDATE orders SET notes = ? WHERE id = ?";
+        update(sql, notes, id);
+    }
+
     public int countToday() {
         String today = LocalDate.now().toString();
         String sql = "SELECT COUNT(*) as count FROM orders WHERE DATE(created_at) = ?";

@@ -18,6 +18,9 @@ public interface OrderService {
     Optional<Order> findByCode(String code);
     List<Order> findAll();
     
+    // Edit notes
+    void updateOrderNotes(Long id, String notes);
+    
     // New methods for management
     List<OrderItem> getOrderItems(Long orderId);
     List<Order> searchOrders(String query, LocalDate date);

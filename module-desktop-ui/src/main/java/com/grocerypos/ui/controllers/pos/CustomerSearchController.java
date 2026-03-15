@@ -26,6 +26,7 @@ public class CustomerSearchController extends BaseController {
     @FXML private TableColumn<Customer, String> colName;
     @FXML private TableColumn<Customer, String> colPhone;
     @FXML private TableColumn<Customer, String> colPoints;
+    @FXML private TableColumn<Customer, String> colAddress;
 
     private final CustomerService customerService;
     private final ObservableList<Customer> customerData = FXCollections.observableArrayList();
@@ -37,16 +38,23 @@ public class CustomerSearchController extends BaseController {
 
     @FXML
     public void initialize() {
+        // Cấu hình các cột hiển thị
         colName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        colAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         
-        // Hiển thị điểm tích lũy
-        colPoints.setCellValueFactory(data -> new SimpleStringProperty(String.format("%,.0f", data.getValue().getRewardPoints())));
+        // Hiển thị điểm tích lũy: Định dạng số có dấu phẩy
+        colPoints.setCellValueFactory(data -> {
+            double points = data.getValue().getRewardPoints();
+            return new SimpleStringProperty(String.format("%,.0f", points));
+        });
 
         customerTable.setItems(customerData);
         
+        // Tìm kiếm tự động khi gõ phím
         searchField.textProperty().addListener((obs, oldVal, newVal) -> handleSearch());
         
+        // Chọn nhanh bằng cách double-click vào dòng
         customerTable.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 handleSelect();
