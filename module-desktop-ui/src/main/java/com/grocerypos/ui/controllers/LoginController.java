@@ -1,9 +1,7 @@
 package com.grocerypos.ui.controllers;
 
 import com.grocerypos.core.service.AuthService;
-import com.grocerypos.core.session.UserSession;
 import com.grocerypos.ui.AppContext;
-import com.grocerypos.ui.utils.AlertHelper;
 import com.grocerypos.ui.utils.NavigationHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -47,11 +45,12 @@ public class LoginController extends BaseController {
             () -> authService.login(username, password),
             session -> {
                 log.info("Đăng nhập thành công: {}", session.getDisplayName());
+                // Sau khi đăng nhập thành công, chuyển đến Menu lựa chọn
                 NavigationHelper.navigateTo("menu-view.fxml");
             },
             e -> {
                 log.error("Lỗi đăng nhập: {}", e.getMessage());
-                statusLabel.setText(e.getMessage());
+                statusLabel.setText("Lỗi: " + e.getMessage());
                 loginButton.setDisable(false);
             }
         );

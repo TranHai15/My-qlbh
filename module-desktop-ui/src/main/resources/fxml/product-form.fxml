@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<VBox prefWidth="950.0" style="-fx-background-color: white; -fx-background-radius: 20;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.ProductFormController">
+    
+    <stylesheets>
+        <URL value="@../css/camellia-theme.css" />
+    </stylesheets>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-background-color: #FDF1F5; -fx-padding: 0 40; -fx-background-radius: 20 20 0 0;">
+        <Label fx:id="titleLabel" text="Thông Tin Sản Phẩm" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #D83367;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label text="🌸 Camellia POS" style="-fx-text-fill: #D83367; -fx-opacity: 0.5; -fx-font-weight: bold;" />
+    </HBox>
+
+    <!-- Body -->
+    <HBox spacing="40.0" VBox.vgrow="ALWAYS">
+        <padding>
+            <Insets top="30.0" right="40.0" bottom="30.0" left="40.0" />
+        </padding>
+
+        <!-- CỘT TRÁI: Nhập liệu dùng GridPane để cố định layout -->
+        <GridPane hgap="20.0" vgap="20.0" HBox.hgrow="ALWAYS">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="150.0" />
+                <ColumnConstraints hgrow="ALWAYS" minWidth="200.0" />
+            </columnConstraints>
+
+            <Label text="Tên sản phẩm *" GridPane.rowIndex="0" style="-fx-font-weight: bold;" />
+            <TextField fx:id="nameField" promptText="Nhập tên sản phẩm..." prefHeight="45.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label text="Mã vạch *" GridPane.rowIndex="1" style="-fx-font-weight: bold;" />
+            <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <TextField fx:id="barcodeField" promptText="Quét hoặc nhập mã..." prefHeight="45.0" HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleGenerateBarcode" text="Tạo mã" prefHeight="45.0" minWidth="80.0" />
+            </HBox>
+
+            <Label text="Danh mục" GridPane.rowIndex="2" style="-fx-font-weight: bold;" />
+            <ComboBox fx:id="categoryCombo" promptText="Chọn nhóm hàng..." prefHeight="45.0" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <!-- Giá vốn được tự động cập nhật qua Nhập Kho, không cho phép nhập tay ở đây -->
+            <Label text="Giá vốn (₫)" GridPane.rowIndex="3" style="-fx-font-weight: bold;" visible="false" managed="false" />
+            <TextField fx:id="costPriceField" promptText="0" prefHeight="45.0" GridPane.columnIndex="1" GridPane.rowIndex="3" visible="false" managed="false" />
+
+            <Label text="Giá bán (₫) *" GridPane.rowIndex="4" style="-fx-font-weight: bold;" />
+            <TextField fx:id="sellPriceField" promptText="0" prefHeight="45.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+            <Label text="Mô tả" GridPane.rowIndex="5" style="-fx-font-weight: bold;" />
+            <TextArea fx:id="descriptionArea" promptText="Nhập mô tả chi tiết..." prefHeight="120.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+        </GridPane>
+
+        <!-- CỘT PHẢI: Hình ảnh & QR -->
+        <VBox spacing="25.0" prefWidth="300.0" minWidth="300.0" alignment="TOP_CENTER" style="-fx-background-color: #F8F9FA; -fx-padding: 20; -fx-background-radius: 15;">
+            
+            <VBox spacing="10.0" alignment="CENTER">
+                <Label text="HÌNH ẢNH SẢN PHẨM" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #95A5A6;" />
+                <StackPane prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #DCDDE1; -fx-border-width: 2; -fx-border-style: dashed; -fx-border-radius: 10; -fx-background-color: white;">
+                    <ImageView fx:id="productImageView" fitHeight="190.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" />
+                    <Button onAction="#handleChooseImage" text="📷 Chọn ảnh" style="-fx-background-color: rgba(216, 51, 103, 0.1); -fx-text-fill: #D83367; -fx-font-weight: bold;" />
+                </StackPane>
+            </VBox>
+
+            <Separator />
+
+            <VBox spacing="10.0" alignment="CENTER">
+                <Label text="MÃ QR DÁN KỆ" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: #95A5A6;" />
+                <ImageView fx:id="qrImageView" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                <Label text="Tự động cập nhật" style="-fx-font-size: 11; -fx-text-fill: #BDC3C7;" />
+            </VBox>
+        </VBox>
+    </HBox>
+
+    <!-- Footer -->
+    <HBox alignment="CENTER_RIGHT" spacing="20.0" style="-fx-padding: 20 40 30 40;">
+        <CheckBox fx:id="activeCheck" text="Đang kinh doanh" selected="true" style="-fx-font-size: 14;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#handleCancel" text="Hủy bỏ" style="-fx-background-color: transparent; -fx-text-fill: #95A5A6;" prefWidth="100.0" />
+        <Button onAction="#handleSave" text="Lưu Sản Phẩm" styleClass="btn-primary" prefHeight="50.0" prefWidth="200.0" />
+    </HBox>
+</VBox>

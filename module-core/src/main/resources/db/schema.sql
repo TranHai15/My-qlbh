@@ -46,8 +46,10 @@ CREATE TABLE IF NOT EXISTS categories (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     name        TEXT    NOT NULL UNIQUE,
     description TEXT,
+    parent_id   INTEGER REFERENCES categories(id),
     is_active   INTEGER NOT NULL DEFAULT 1,
-    created_at  TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
+    created_at  TEXT    NOT NULL DEFAULT (datetime('now','localtime')),
+    updated_at  TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
 );
 
 -- ------------------------------------------------------------
@@ -64,6 +66,64 @@ CREATE TABLE IF NOT EXISTS products (
     is_active       INTEGER NOT NULL DEFAULT 1,
     created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime')),
     created_by      TEXT    NOT NULL DEFAULT 'system'
+);
+
+-- ------------------------------------------------------------
+-- CUSTOMERS — Quản lý khách hàng
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS customers (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    name            TEXT    NOT NULL,
+    phone           TEXT    UNIQUE,
+    address         TEXT,
+    discount_rate   REAL    DEFAULT 0,
+    total_debt      REAL    DEFAULT 0,
+    notes           TEXT,
+    is_active       INTEGER NOT NULL DEFAULT 1,
+    created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime')),
+    updated_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
+);
+
+-- ------------------------------------------------------------
+-- DEBT_RECORDS — Nhật ký công nợ
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS debt_records (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    customer_id     INTEGER NOT NULL REFERENCES customers(id),
+    amount          REAL    NOT NULL,
+    type            TEXT    NOT NULL, -- 'DEBT' (Nợ thêm) | 'REPAYMENT' (Trả nợ)
+    description     TEXT,
+    created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
+);
+
+-- ------------------------------------------------------------
+-- ORDERS — Đơn hàng
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS orders (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_code      TEXT    NOT NULL UNIQUE,
+    customer_id     INTEGER REFERENCES customers(id),
+    subtotal        REAL    NOT NULL,
+    discount_amount REAL    NOT NULL DEFAULT 0,
+    total_amount    REAL    NOT NULL,
+    status          TEXT    NOT NULL DEFAULT 'COMPLETED', -- 'COMPLETED' | 'CANCELLED'
+    notes           TEXT,
+    created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
+);
+
+-- ------------------------------------------------------------
+-- ORDER_ITEMS — Chi tiết đơn hàng
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS order_items (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id        INTEGER NOT NULL REFERENCES orders(id),
+    product_id      INTEGER NOT NULL REFERENCES products(id),
+    product_name    TEXT    NOT NULL,   -- snapshot
+    unit_price      REAL    NOT NULL,   -- snapshot
+    cost_price      REAL    NOT NULL,   -- snapshot
+    quantity        REAL    NOT NULL,
+    discount_amount REAL    NOT NULL DEFAULT 0,
+    line_total      REAL    NOT NULL
 );
 
 -- ------------------------------------------------------------

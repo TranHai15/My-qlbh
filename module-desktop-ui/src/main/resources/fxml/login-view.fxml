@@ -3,10 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import java.net.URL?>
 
-<StackPane prefWidth="800.0" prefHeight="600.0" style="-fx-background-color: #FFF9F9;" 
+<StackPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom right, #FDF1F5, #FFFFFF);" 
            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
            fx:controller="com.grocerypos.ui.controllers.LoginController">
     
@@ -14,34 +15,32 @@
         <URL value="@../css/camellia-theme.css" />
     </stylesheets>
 
-    <!-- Background Decoration -->
-    <Pane mouseTransparent="true">
-        <Label text="&#x1F338;" layoutX="50.0" layoutY="50.0" style="-fx-font-size: 40; -fx-opacity: 0.2;"/>
-        <Label text="&#x1F338;" layoutX="700.0" layoutY="500.0" style="-fx-font-size: 60; -fx-opacity: 0.1;"/>
-        <Label text="&#x1F338;" layoutX="650.0" layoutY="80.0" style="-fx-font-size: 30; -fx-opacity: 0.15;"/>
-    </Pane>
-
-    <VBox alignment="CENTER" spacing="30.0" maxWidth="400.0" maxHeight="500.0" styleClass="card">
-        <padding>
-            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
-        </padding>
-
-        <VBox alignment="CENTER" spacing="5.0">
-            <Label text="Camellia" styleClass="app-title" />
-            <Label text="Thanh xuân &amp; Sự tử tế" textFill="#A88181">
-                <font><Font name="System Italic" size="14.0" /></font>
-            </Label>
-        </VBox>
+    <VBox alignment="CENTER" maxWidth="450.0" spacing="30.0" styleClass="card" 
+          style="-fx-padding: 50; -fx-background-radius: 30; -fx-effect: dropshadow(three-pass-box, rgba(216, 51, 103, 0.1), 30, 0, 0, 15);">
         
-        <VBox spacing="15.0">
-            <Label text="Đăng nhập" textFill="#5D4037" style="-fx-font-weight: bold;"/>
-            <TextField fx:id="usernameField" promptText="Tên đăng nhập" prefHeight="45.0" />
-            <PasswordField fx:id="passwordField" promptText="Mật khẩu" prefHeight="45.0" />
+        <VBox alignment="CENTER" spacing="15.0">
+            <!-- Sửa lỗi: Thay -fx-primary-light bằng mã màu #FFB7C5 -->
+            <Circle fill="#FFB7C5" radius="45.0" stroke="#D83367" strokeType="INSIDE" strokeWidth="2.0" />
+            <Label text="Camellia POS" style="-fx-font-size: 32; -fx-font-weight: bold; -fx-text-fill: #D83367;" />
+            <Label text="Chào mừng trở lại! Vui lòng đăng nhập" style="-fx-text-fill: #7F8C8D; -fx-font-size: 14;" />
         </VBox>
 
-        <Button fx:id="loginButton" text="Đăng Nhập" onAction="#handleLogin"
-                prefHeight="50.0" prefWidth="Infinity" styleClass="btn-primary" />
+        <VBox spacing="20.0">
+            <VBox spacing="8.0">
+                <Label text="Tên đăng nhập" style="-fx-font-weight: bold;" />
+                <TextField fx:id="usernameField" promptText="Nhập tên đăng nhập..." prefHeight="45.0" text="admin" />
+            </VBox>
+            
+            <VBox spacing="8.0">
+                <Label text="Mật khẩu" style="-fx-font-weight: bold;" />
+                <PasswordField fx:id="passwordField" onAction="#handleLogin" promptText="Nhập mật khẩu..." prefHeight="45.0" text="admin123" />
+            </VBox>
 
-        <Label fx:id="statusLabel" textFill="#D83367" />
+            <Label fx:id="statusLabel" textAlignment="CENTER" wrapText="true" style="-fx-text-fill: #E74C3C; -fx-font-size: 13;" />
+
+            <Button fx:id="loginButton" onAction="#handleLogin" prefHeight="50.0" prefWidth="Infinity" styleClass="btn-primary" text="Đăng nhập" style="-fx-font-size: 16;" />
+        </VBox>
+
+        <Label text="© 2026 Camellia Soft - Phiên bản 2.0" style="-fx-font-size: 11; -fx-text-fill: #BDC3C7;" />
     </VBox>
 </StackPane>

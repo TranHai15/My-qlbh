@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="25.0" style="-fx-background-color: transparent;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.CustomerController">
+    
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20.0">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Quản Lý Khách Hàng" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Label text="Quản lý thông tin hội viên và tích điểm thưởng" style="-fx-text-fill: #7F8C8D;" />
+        </VBox>
+        <Button onAction="#handleAddCustomer" styleClass="btn-primary" text="+ Thêm khách hàng" prefHeight="45.0" />
+    </HBox>
+
+    <!-- Bộ lọc tìm kiếm -->
+    <HBox spacing="15.0" styleClass="card" alignment="CENTER_LEFT" style="-fx-padding: 15;">
+        <TextField fx:id="searchField" promptText="Tìm theo tên hoặc số điện thoại..." prefWidth="400.0" prefHeight="40.0" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Label fx:id="totalCountLabel" text="0 khách hàng" style="-fx-text-fill: #95A5A6; -fx-font-weight: bold;" />
+        <Button onAction="#handleSearch" style="-fx-background-color: #34495E; -fx-text-fill: white; -fx-background-radius: 8;" text="🔍 Tìm kiếm" prefHeight="40.0" prefWidth="120.0" />
+        <Button onAction="#loadData" styleClass="btn-secondary" text="🔄 Làm mới" prefHeight="40.0" />
+    </HBox>
+
+    <!-- Bảng dữ liệu -->
+    <VBox VBox.vgrow="ALWAYS" styleClass="card" style="-fx-padding: 0;">
+        <TableView fx:id="customerTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 12;">
+            <columns>
+                <TableColumn fx:id="colId" prefWidth="60.0" text="ID" />
+                <TableColumn fx:id="colName" prefWidth="250.0" text="Tên khách hàng" />
+                <TableColumn fx:id="colPhone" prefWidth="150.0" text="Số điện thoại" />
+                <TableColumn fx:id="colAddress" prefWidth="250.0" text="Địa chỉ" />
+                <TableColumn fx:id="colPoints" prefWidth="120.0" text="Điểm tích lũy" />
+                <TableColumn fx:id="colDiscount" prefWidth="100.0" text="Ưu đãi (%)" />
+                <TableColumn fx:id="colAction" prefWidth="150.0" text="Thao tác" />
+            </columns>
+            <placeholder>
+                <Label text="Chưa có khách hàng nào." />
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>

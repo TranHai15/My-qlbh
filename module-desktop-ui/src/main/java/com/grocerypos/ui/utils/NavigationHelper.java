@@ -28,4 +28,31 @@ public class NavigationHelper {
             log.error("Không thể chuyển màn hình đến: {}", fxmlPath, e);
         }
     }
+
+    public static <T> T openDialog(String fxmlPath, String title, java.util.function.Consumer<T> initializer) {
+        try {
+            FXMLLoader loader = new FXMLLoader(NavigationHelper.class.getResource("/fxml/" + fxmlPath));
+            javafx.stage.Stage dialog = new javafx.stage.Stage();
+            dialog.setTitle(title);
+            dialog.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            dialog.initOwner(primaryStage);
+            dialog.setResizable(false); // Đặt resizable trước khi nạp cảnh
+            
+            javafx.scene.Scene scene = new Scene(loader.load());
+            dialog.setScene(scene);
+            
+            T controller = loader.getController();
+            if (initializer != null) {
+                initializer.accept(controller);
+            }
+            
+            // Không gọi sizeToScene() vì ta đã thiết lập prefWidth cứng trong FXML
+            dialog.showAndWait();
+            
+            return controller;
+        } catch (IOException e) {
+            log.error("Không thể mở dialog: {}", fxmlPath, e);
+            return null;
+        }
+    }
 }

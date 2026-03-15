@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.CategoryController">
+    
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <HBox alignment="CENTER_LEFT" spacing="15.0">
+        <Label text="🌿 Quản Lý Danh Mục" textFill="#5D4037">
+            <font><Font name="System Bold" size="24.0" /></font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#handleAdd" text="+ Thêm Danh Mục" styleClass="btn-primary" prefHeight="40.0" prefWidth="180.0" />
+        <Button onAction="#loadData" text="🔄 Làm mới" style="-fx-background-color: transparent; -fx-text-fill: #7F8C8D; -fx-cursor: hand;" />
+    </HBox>
+
+    <TreeTableView fx:id="categoryTreeTable" VBox.vgrow="ALWAYS" showRoot="false" style="-fx-background-radius: 10; -fx-overflow-x: hidden;">
+        <columns>
+            <TreeTableColumn fx:id="colImage" text="Biểu tượng" prefWidth="100.0" />
+            <TreeTableColumn fx:id="colName" text="Tên Danh Mục" prefWidth="250.0" />
+            <TreeTableColumn fx:id="colDescription" text="Mô tả" prefWidth="350.0" />
+            <TreeTableColumn fx:id="colStatus" text="Trạng thái" prefWidth="120.0" />
+            <TreeTableColumn fx:id="colAction" text="Thao tác" prefWidth="150.0" />
+        </columns>
+    </TreeTableView>
+
+</VBox>

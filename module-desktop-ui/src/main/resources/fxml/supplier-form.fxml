@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<VBox prefWidth="600.0" style="-fx-background-color: white; -fx-background-radius: 20;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.SupplierFormController">
+    
+    <stylesheets>
+        <URL value="@../css/camellia-theme.css" />
+    </stylesheets>
+
+    <HBox alignment="CENTER_LEFT" prefHeight="80.0" style="-fx-background-color: #FDF1F5; -fx-padding: 0 40; -fx-background-radius: 20 20 0 0;">
+        <Label fx:id="titleLabel" text="Thông Tin Đối Tác" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #D83367;" />
+    </HBox>
+
+    <VBox spacing="25.0" style="-fx-padding: 40;">
+        <GridPane hgap="20.0" vgap="20.0">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="150.0" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+
+            <Label text="Tên nhà cung cấp *" style="-fx-font-weight: bold;" />
+            <TextField fx:id="nameField" promptText="VD: Công ty TNHH ABC..." prefHeight="45.0" GridPane.columnIndex="1" />
+
+            <Label text="Số điện thoại *" style="-fx-font-weight: bold;" GridPane.rowIndex="1" />
+            <TextField fx:id="phoneField" promptText="Số điện thoại liên hệ..." prefHeight="45.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="Email" style="-fx-font-weight: bold;" GridPane.rowIndex="2" />
+            <TextField fx:id="emailField" promptText="địa_chỉ_email@domain.com" prefHeight="45.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+            <Label text="Địa chỉ" style="-fx-font-weight: bold;" GridPane.rowIndex="3" />
+            <TextField fx:id="addressField" promptText="Địa chỉ văn phòng/kho hàng..." prefHeight="45.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+        </GridPane>
+    </VBox>
+
+    <HBox alignment="CENTER_RIGHT" spacing="20.0" style="-fx-padding: 0 40 40 40;">
+        <Button onAction="#handleCancel" text="Hủy bỏ" style="-fx-background-color: transparent; -fx-text-fill: #95A5A6;" />
+        <Button onAction="#handleSave" text="Lưu Đối Tác" styleClass="btn-primary" prefHeight="45.0" prefWidth="180.0" />
+    </HBox>
+</VBox>

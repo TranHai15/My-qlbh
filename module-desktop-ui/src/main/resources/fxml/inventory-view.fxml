@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" style="-fx-background-color: transparent;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.InventoryController">
+    
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <!-- Section 1: Tạo Phiếu Nhập Mới -->
+    <VBox spacing="15.0" styleClass="card">
+        <Label text="Tạo Phiếu Nhập Kho Mới" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #D83367;" />
+        
+        <HBox spacing="20.0" alignment="BOTTOM_LEFT">
+            <VBox spacing="8.0" HBox.hgrow="ALWAYS">
+                <Label text="Sản phẩm *" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="productCombo" promptText="Chọn sản phẩm..." prefHeight="40.0" maxWidth="Infinity" />
+            </VBox>
+            
+            <VBox spacing="8.0" prefWidth="250.0">
+                <Label text="Nhà cung cấp *" style="-fx-font-weight: bold;" />
+                <ComboBox fx:id="supplierCombo" promptText="Chọn đối tác..." prefHeight="40.0" maxWidth="Infinity" />
+            </VBox>
+
+            <VBox spacing="8.0" prefWidth="120.0">
+                <Label text="Số lượng *" style="-fx-font-weight: bold;" />
+                <TextField fx:id="quantityField" promptText="0" prefHeight="40.0" />
+            </VBox>
+
+            <VBox spacing="8.0" prefWidth="150.0">
+                <Label text="Giá nhập (₫) *" style="-fx-font-weight: bold;" />
+                <TextField fx:id="priceField" promptText="0" prefHeight="40.0" />
+            </VBox>
+
+            <Button onAction="#handleEntry" styleClass="btn-primary" text="NHẬP KHO" prefHeight="40.0" prefWidth="150.0" />
+        </HBox>
+        
+        <TextField fx:id="noteField" promptText="Ghi chú thêm (Số lô, Hạn sử dụng, ...)" prefHeight="40.0" />
+    </VBox>
+
+    <!-- Section 2: Lịch Sử Nhập Hàng -->
+    <VBox VBox.vgrow="ALWAYS" spacing="15.0" styleClass="card">
+        <HBox alignment="CENTER_LEFT">
+            <Label text="Lịch Sử Nhập Hàng Gần Đây" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button onAction="#loadHistory" text="🔄 Làm mới" style="-fx-background-color: transparent; -fx-text-fill: #7F8C8D;" />
+        </HBox>
+
+        <TableView fx:id="historyTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 10;">
+            <columns>
+                <TableColumn fx:id="colDate" prefWidth="180.0" text="Ngày nhập" />
+                <TableColumn fx:id="colProductName" prefWidth="250.0" text="Tên sản phẩm" />
+                <TableColumn fx:id="colSupplierName" prefWidth="200.0" text="Nhà cung cấp" />
+                <TableColumn fx:id="colQty" prefWidth="100.0" text="Số lượng" />
+                <TableColumn fx:id="colCost" prefWidth="150.0" text="Giá nhập" />
+                <TableColumn fx:id="colTotal" prefWidth="150.0" text="Thành tiền" />
+                <TableColumn fx:id="colNote" prefWidth="200.0" text="Ghi chú" />
+            </columns>
+        </TableView>
+    </VBox>
+</VBox>

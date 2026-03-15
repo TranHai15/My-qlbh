@@ -1,35 +1,31 @@
 package com.grocerypos.ui.controllers;
 
 import com.grocerypos.core.session.SessionManager;
-import com.grocerypos.ui.utils.AlertHelper;
 import com.grocerypos.ui.utils.NavigationHelper;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Controller cho màn hình Menu lựa chọn chức năng.
+ * Controller màn hình lựa chọn Menu chính.
  */
 public class MenuController extends BaseController {
+    private static final Logger log = LoggerFactory.getLogger(MenuController.class);
 
-    @FXML private Label welcomeLabel;
+    @FXML private VBox cardPOS;
+    @FXML private VBox cardAdmin;
 
     @FXML
-    public void initialize() {
-        SessionManager.getInstance().getCurrentSession().ifPresent(session -> {
-            welcomeLabel.setText("Xin chào, " + session.getDisplayName());
-        });
+    private void openPOS() {
+        log.info("Chuyển sang màn hình Bán hàng (POS)...");
+        NavigationHelper.navigateTo("pos/pos-view.fxml");
     }
 
     @FXML
-    private void goToPOS() {
-        // Sau này sẽ tạo pos-view.fxml
-        AlertHelper.showInfo("Thông báo", "Đang chuyển đến màn hình Bán hàng (POS)...");
-    }
-
-    @FXML
-    private void goToManagement() {
-        // Sau này sẽ tạo dashboard-view.fxml
-        AlertHelper.showInfo("Thông báo", "Đang chuyển đến màn hình Quản lý...");
+    private void openAdmin() {
+        log.info("Chuyển sang màn hình Quản lý (Admin)...");
+        NavigationHelper.navigateTo("admin-layout.fxml");
     }
 
     @FXML

@@ -14,6 +14,12 @@ application {
 
 dependencies {
     implementation project(':module-core')
+    implementation project(':module-product')
+    implementation project(':module-customer')
+    implementation project(':module-order')
+    implementation project(':module-promotion')
+    implementation project(':module-inventory')
+    implementation project(':module-report')
 }
 
 // Cách đúng để lấy đường dẫn thư viện JavaFX trong Gradle hiện đại

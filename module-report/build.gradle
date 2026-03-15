@@ -1,0 +1,10 @@
+dependencies {
+    implementation project(':module-core')
+    implementation project(':module-product')
+    implementation project(':module-customer')
+    implementation project(':module-order')
+    implementation project(':module-inventory')
+
+    // Apache POI for Excel export
+    implementation "org.apache.poi:poi-ooxml:${poiVersion}"
+}

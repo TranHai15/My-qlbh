@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,18 +27,28 @@ class AuthServiceTest {
 
     private final String correctPassword = "adminPassword123";
     private final String hashedPassword = PasswordUtils.hashPassword(correctPassword);
+    private AuthRepository.UserSessionWithPassword mockResult;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         authService = new AuthServiceImpl(authRepo);
-        SessionManager.getInstance().logout(); // Đảm bảo trạng thái sạch
+        SessionManager.getInstance().logout();
+
+        UserSession session = UserSession.builder()
+                .userId(1L)
+                .username("admin")
+                .displayName("Quản trị viên")
+                .role(UserRole.ADMIN)
+                .loginTime(LocalDateTime.now())
+                .build();
+        mockResult = new AuthRepository.UserSessionWithPassword(session, hashedPassword);
     }
 
     @Test
     void login_Success() {
         // Given
-        when(authRepo.getAdminPassword()).thenReturn(Optional.of(hashedPassword));
+        when(authRepo.findByUsername("admin")).thenReturn(Optional.of(mockResult));
 
         // When
         UserSession session = authService.login("admin", correctPassword);
@@ -51,6 +62,9 @@ class AuthServiceTest {
 
     @Test
     void login_WrongUsername_ShouldThrowException() {
+        // Given
+        when(authRepo.findByUsername("wrongUser")).thenReturn(Optional.empty());
+
         // When & Then
         assertThrows(ValidationException.class, () -> {
             authService.login("wrongUser", correctPassword);
@@ -61,7 +75,7 @@ class AuthServiceTest {
     @Test
     void login_WrongPassword_ShouldThrowException() {
         // Given
-        when(authRepo.getAdminPassword()).thenReturn(Optional.of(hashedPassword));
+        when(authRepo.findByUsername("admin")).thenReturn(Optional.of(mockResult));
 
         // When & Then
         assertThrows(ValidationException.class, () -> {
@@ -73,7 +87,7 @@ class AuthServiceTest {
     @Test
     void logout_Success() {
         // Given
-        when(authRepo.getAdminPassword()).thenReturn(Optional.of(hashedPassword));
+        when(authRepo.findByUsername("admin")).thenReturn(Optional.of(mockResult));
         authService.login("admin", correctPassword);
         assertTrue(SessionManager.getInstance().isLoggedIn());
 

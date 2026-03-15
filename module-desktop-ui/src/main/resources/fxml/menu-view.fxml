@@ -3,66 +3,69 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import java.net.URL?>
 
-<VBox alignment="TOP_CENTER" spacing="40.0" prefWidth="900.0" prefHeight="700.0" 
-      style="-fx-background-color: #FFF9F9;" 
-      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.grocerypos.ui.controllers.MenuController">
+<StackPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: linear-gradient(to bottom right, #FFFFFF, #FFF5F7);" 
+           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+           fx:controller="com.grocerypos.ui.controllers.MenuController">
     
     <stylesheets>
         <URL value="@../css/camellia-theme.css" />
     </stylesheets>
 
-    <padding>
-        <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-    </padding>
-
-    <!-- Header -->
-    <HBox alignment="CENTER_LEFT" prefWidth="Infinity">
-        <VBox spacing="5.0">
-            <Label text="Camellia" styleClass="app-title" style="-fx-font-size: 28;"/>
-            <Label fx:id="welcomeLabel" text="Chào buổi sáng, Admin &#x1F338;" textFill="#A88181" />
+    <VBox alignment="CENTER" spacing="60.0">
+        <!-- Header Tiêu Đề -->
+        <VBox alignment="CENTER" spacing="15.0">
+            <Label text="HỆ THỐNG QUẢN LÝ CAMELLIA" style="-fx-letter-spacing: 5; -fx-text-fill: #D83367; -fx-font-weight: bold; -fx-font-size: 14;" />
+            <Label text="Vui lòng chọn phân hệ làm việc" style="-fx-font-size: 36; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Region prefHeight="2.0" prefWidth="100.0" maxWidth="100.0" style="-fx-background-color: #D83367;" />
         </VBox>
-        <Region HBox.hgrow="ALWAYS" />
-        <Button text="Đăng xuất" onAction="#handleLogout" 
-                style="-fx-background-color: transparent; -fx-text-fill: #D83367; -fx-cursor: hand; -fx-font-weight: bold;" />
-    </HBox>
 
-    <Separator />
-
-    <Label text="Chọn dịch vụ bạn muốn thực hiện" textFill="#5D4037">
-        <font><Font name="System Bold" size="20.0" /></font>
-    </Label>
-
-    <HBox alignment="CENTER" spacing="50.0" VBox.vgrow="ALWAYS">
-        <!-- Card Bán Hàng -->
-        <Button onAction="#goToPOS" styleClass="btn-menu" prefWidth="300.0" prefHeight="350.0">
-            <graphic>
-                <VBox alignment="CENTER" spacing="20.0">
-                    <Label text="&#x1F6D2;" styleClass="icon-label"/>
-                    <VBox alignment="CENTER" spacing="10.0">
-                        <Label text="BÁN HÀNG" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #5D4037;"/>
-                        <Label text="Máy tính tiền &amp; In hóa đơn" textFill="#7F8C8D" />
-                    </VBox>
+        <!-- Container Chứa 2 Lựa Chọn -->
+        <HBox alignment="CENTER" spacing="50.0">
+            
+            <!-- Card POS: Bán Hàng -->
+            <VBox fx:id="cardPOS" onMouseClicked="#openPOS" alignment="CENTER" spacing="30.0" styleClass="btn-menu" prefWidth="380.0" prefHeight="450.0">
+                <StackPane>
+                    <Circle radius="65.0" styleClass="icon-circle-pos" />
+                    <Label text="🛒" style="-fx-font-size: 60; -fx-text-fill: white;" />
+                </StackPane>
+                
+                <VBox alignment="CENTER" spacing="10.0">
+                    <Label text="BÁN HÀNG (POS)" styleClass="menu-title" style="-fx-text-fill: #16A085;" />
+                    <Label text="Giao diện tính tiền siêu tốc, quét mã vạch và in hóa đơn chuyên nghiệp." 
+                           styleClass="menu-desc" textAlignment="CENTER" wrapText="true" maxWidth="280.0" />
                 </VBox>
-            </graphic>
-        </Button>
+                
+                <Button mouseTransparent="true" text="Truy cập ngay" style="-fx-background-color: #E8F8F5; -fx-text-fill: #16A085; -fx-background-radius: 20; -fx-padding: 8 25; -fx-font-weight: bold;" />
+            </VBox>
 
-        <!-- Card Quản Lý -->
-        <Button onAction="#goToManagement" styleClass="btn-menu" prefWidth="300.0" prefHeight="350.0">
-            <graphic>
-                <VBox alignment="CENTER" spacing="20.0">
-                    <Label text="&#x1F4E6;" styleClass="icon-label"/>
-                    <VBox alignment="CENTER" spacing="10.0">
-                        <Label text="QUẢN LÝ KHO" style="-fx-font-size: 22; -fx-font-weight: bold; -fx-text-fill: #5D4037;"/>
-                        <Label text="Sản phẩm, Kho &amp; Báo cáo" textFill="#7F8C8D" />
-                    </VBox>
+            <!-- Card Admin: Quản Trị -->
+            <VBox fx:id="cardAdmin" onMouseClicked="#openAdmin" alignment="CENTER" spacing="30.0" styleClass="btn-menu" prefWidth="380.0" prefHeight="450.0">
+                <StackPane>
+                    <Circle radius="65.0" styleClass="icon-circle-admin" />
+                    <Label text="⚙️" style="-fx-font-size: 60; -fx-text-fill: white;" />
+                </StackPane>
+                
+                <VBox alignment="CENTER" spacing="10.0">
+                    <Label text="QUẢN TRỊ VIÊN" styleClass="menu-title" style="-fx-text-fill: #D83367;" />
+                    <Label text="Quản lý kho hàng, danh mục sản phẩm, khách hàng và xem báo cáo doanh thu." 
+                           styleClass="menu-desc" textAlignment="CENTER" wrapText="true" maxWidth="280.0" />
                 </VBox>
-            </graphic>
-        </Button>
-    </HBox>
-    
-    <Label text="Phiên bản 1.0.0 | Camellia Japanese Style" textFill="#D1D1D1" />
-</VBox>
+                
+                <Button mouseTransparent="true" text="Truy cập ngay" style="-fx-background-color: #FDF1F5; -fx-text-fill: #D83367; -fx-background-radius: 20; -fx-padding: 8 25; -fx-font-weight: bold;" />
+            </VBox>
+            
+        </HBox>
+
+        <!-- Footer -->
+        <HBox alignment="CENTER" spacing="20.0">
+            <Button onAction="#handleLogout" text="Đăng xuất tài khoản" 
+                    style="-fx-background-color: transparent; -fx-text-fill: #95A5A6; -fx-cursor: hand; -fx-font-size: 14;" />
+            <Separator orientation="VERTICAL" prefHeight="20.0" />
+            <Label text="Phiên bản 2.0.4" style="-fx-text-fill: #BDC3C7; -fx-font-size: 13;" />
+        </HBox>
+    </VBox>
+</StackPane>

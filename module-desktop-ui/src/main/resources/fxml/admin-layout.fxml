@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<HBox prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #FDFDFD;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.AdminLayoutController">
+    
+    <stylesheets>
+        <URL value="@../css/camellia-theme.css" />
+    </stylesheets>
+
+    <!-- Sidebar -->
+    <VBox prefWidth="250.0" minWidth="250.0" styleClass="sidebar">
+        <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 30 0 40 0;">
+            <Circle fill="#FFB7C5" radius="35.0" stroke="#D83367" strokeType="INSIDE" />
+            <Label text="Camellia POS" styleClass="title-main" />
+            <Label text="Hệ thống quản lý tạp hóa" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12;" />
+        </VBox>
+
+        <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+            <HBox fx:id="navDashboard" onMouseClicked="#showDashboard" styleClass="nav-item">
+                <Label styleClass="nav-label" text="📊 Tổng quan" />
+            </HBox>
+            <HBox fx:id="navProduct" onMouseClicked="#showProducts" styleClass="nav-item">
+                <Label styleClass="nav-label" text="📦 Sản phẩm" />
+            </HBox>
+            <HBox fx:id="navCategory" onMouseClicked="#showCategories" styleClass="nav-item">
+                <Label styleClass="nav-label" text="📂 Danh mục" />
+            </HBox>
+            <HBox fx:id="navCustomer" onMouseClicked="#showCustomers" styleClass="nav-item">
+                <Label styleClass="nav-label" text="👥 Khách hàng" />
+            </HBox>
+            <HBox fx:id="navInventory" onMouseClicked="#showInventory" styleClass="nav-item">
+                <Label styleClass="nav-label" text="🏭 Kho hàng" />
+            </HBox>
+            <HBox fx:id="navSupplier" onMouseClicked="#showSuppliers" styleClass="nav-item">
+                <Label styleClass="nav-label" text="🤝 Nhà cung cấp" />
+            </HBox>
+            <HBox fx:id="navOrder" onMouseClicked="#showOrders" styleClass="nav-item">
+                <Label styleClass="nav-label" text="📜 Đơn hàng" />
+            </HBox>
+            <HBox fx:id="navReport" onMouseClicked="#showReports" styleClass="nav-item">
+                <Label styleClass="nav-label" text="📈 Báo cáo" />
+            </HBox>
+        </VBox>
+
+        <VBox spacing="10.0" style="-fx-padding: 20;">
+            <Button onAction="#backToMenu" prefWidth="Infinity" style="-fx-background-color: #ECF0F1; -fx-text-fill: #2C3E50; -fx-background-radius: 8;" text="⬅ Về Menu Chính" />
+            <Button onAction="#handleLogout" prefWidth="Infinity" style="-fx-background-color: #FDF1F5; -fx-text-fill: #D83367; -fx-background-radius: 8;" text="Đăng xuất" />
+        </VBox>
+    </VBox>
+
+    <!-- Main Content Area -->
+    <VBox HBox.hgrow="ALWAYS">
+        <!-- Header -->
+        <HBox alignment="CENTER_LEFT" prefHeight="70.0" style="-fx-background-color: white; -fx-padding: 0 30; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.03), 0, 5, 0, 0);">
+            <Label fx:id="headerTitle" text="Tổng quan" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox alignment="CENTER" spacing="15.0">
+                <VBox alignment="CENTER_RIGHT">
+                    <Label fx:id="userNameLabel" text="Quản trị viên" style="-fx-font-weight: bold;" />
+                    <Label text="Hôm nay là 15/03/2026" style="-fx-font-size: 11; -fx-text-fill: #7F8C8D;" />
+                </VBox>
+                <Circle fill="#ECF0F1" radius="20.0" />
+            </HBox>
+        </HBox>
+
+        <!-- Content Placeholder -->
+        <StackPane fx:id="contentArea" VBox.vgrow="ALWAYS" style="-fx-padding: 30; -fx-background-color: #FDFDFD;">
+            <!-- Màn hình con sẽ được load vào đây -->
+        </StackPane>
+    </VBox>
+</HBox>

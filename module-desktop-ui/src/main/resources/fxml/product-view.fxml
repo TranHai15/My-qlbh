@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="25.0" style="-fx-background-color: transparent;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.ProductController">
+    
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <!-- Header & Nút thêm -->
+    <HBox alignment="CENTER_LEFT" spacing="20.0">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Danh Sách Sản Phẩm" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Label text="Quản lý thông tin, giá bán và tồn kho sản phẩm" style="-fx-text-fill: #7F8C8D;" />
+        </VBox>
+        <Button onAction="#handleAdd" styleClass="btn-primary" text="+ Thêm sản phẩm" prefHeight="45.0" />
+    </HBox>
+
+    <!-- Bộ lọc tìm kiếm -->
+    <HBox spacing="15.0" styleClass="card" alignment="CENTER_LEFT" style="-fx-padding: 15;">
+        <TextField fx:id="searchField" promptText="Tìm theo tên hoặc mã vạch..." prefWidth="350.0" prefHeight="40.0" />
+        <ComboBox fx:id="categoryFilter" promptText="Tất cả danh mục" prefWidth="200.0" prefHeight="40.0" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#handleSearch" style="-fx-background-color: #34495E; -fx-text-fill: white; -fx-background-radius: 8;" text="🔍 Tìm kiếm" prefHeight="40.0" prefWidth="120.0" />
+        <Button onAction="#handleRefresh" styleClass="btn-secondary" text="🔄 Làm mới" prefHeight="40.0" />
+    </HBox>
+
+    <!-- Bảng dữ liệu -->
+    <VBox VBox.vgrow="ALWAYS" styleClass="card" style="-fx-padding: 0;">
+        <TableView fx:id="productTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 12;">
+            <columns>
+                <TableColumn fx:id="idCol" prefWidth="60.0" text="ID" />
+                <TableColumn fx:id="imageCol" prefWidth="80.0" text="Ảnh" />
+                <TableColumn fx:id="nameCol" prefWidth="250.0" text="Tên sản phẩm" />
+                <TableColumn fx:id="barcodeCol" prefWidth="150.0" text="Mã vạch" />
+                <TableColumn fx:id="categoryCol" prefWidth="150.0" text="Danh mục" />
+                <TableColumn fx:id="sellPriceCol" prefWidth="150.0" text="Giá bán" />
+                <TableColumn fx:id="stockCol" prefWidth="120.0" text="Tồn kho" />
+                <TableColumn fx:id="statusCol" prefWidth="120.0" text="Trạng thái" />
+                <TableColumn fx:id="actionCol" prefWidth="150.0" text="Thao tác" />
+            </columns>
+            <placeholder>
+                <Label text="Chưa có sản phẩm nào trong hệ thống." />
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>

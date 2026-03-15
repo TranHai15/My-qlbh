@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" style="-fx-background-color: transparent;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.OrderManagementController">
+    
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <!-- Header & Filters -->
+    <HBox alignment="CENTER_LEFT" spacing="20.0">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Quản Lý Đơn Hàng" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Label text="Tra cứu lịch sử và chi tiết các giao dịch bán hàng" style="-fx-text-fill: #7F8C8D;" />
+        </VBox>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+             <TextField fx:id="searchField" promptText="Mã đơn hàng..." prefWidth="200.0" prefHeight="40.0" />
+             <DatePicker fx:id="dateFilter" promptText="Chọn ngày" prefWidth="150.0" prefHeight="40.0" />
+             <Button onAction="#handleSearch" styleClass="btn-primary" text="🔍 Tìm kiếm" prefHeight="40.0" />
+             <Button onAction="#handleReset" styleClass="btn-secondary" text="🔄 Làm mới" prefHeight="40.0" />
+        </HBox>
+    </HBox>
+
+    <!-- Table -->
+    <VBox VBox.vgrow="ALWAYS" styleClass="card">
+        <TableView fx:id="orderTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colTime" prefWidth="180.0" text="Thời gian" />
+                <TableColumn fx:id="colCode" prefWidth="150.0" text="Mã đơn hàng" />
+                <TableColumn fx:id="colCustomer" prefWidth="200.0" text="Khách hàng" />
+                <TableColumn fx:id="colTotal" prefWidth="150.0" text="Tổng tiền" />
+                <TableColumn fx:id="colStatus" prefWidth="120.0" text="Trạng thái" />
+                <TableColumn fx:id="colActions" prefWidth="150.0" text="Thao tác" />
+            </columns>
+            <placeholder>
+                <Label text="Không tìm thấy đơn hàng nào." />
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>

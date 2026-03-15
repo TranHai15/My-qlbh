@@ -3,7 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-core/GroceryPOS.module-core.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-core/GroceryPOS.module-core.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-customer/GroceryPOS.module-customer.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-customer/GroceryPOS.module-customer.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-desktop-ui/GroceryPOS.module-desktop-ui.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-desktop-ui/GroceryPOS.module-desktop-ui.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-inventory/GroceryPOS.module-inventory.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-inventory/GroceryPOS.module-inventory.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-order/GroceryPOS.module-order.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-order/GroceryPOS.module-order.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-product/GroceryPOS.module-product.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-product/GroceryPOS.module-product.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-promotion/GroceryPOS.module-promotion.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-promotion/GroceryPOS.module-promotion.main.iml" />
     </modules>
   </component>
 </project>

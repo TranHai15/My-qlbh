@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" style="-fx-background-color: transparent;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.ReportController">
+    
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20.0">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Báo Cáo &amp; Thống Kê" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Label text="Theo dõi doanh thu, lợi nhuận, sản phẩm và công nợ" style="-fx-text-fill: #7F8C8D;" />
+        </VBox>
+        <HBox spacing="10.0" alignment="CENTER_LEFT">
+             <DatePicker fx:id="fromDate" promptText="Từ ngày" prefWidth="150.0" />
+             <DatePicker fx:id="toDate" promptText="Đến ngày" prefWidth="150.0" />
+             <Button onAction="#handleSearch" styleClass="btn-primary" text="🔍 Xem Báo Cáo" />
+        </HBox>
+    </HBox>
+
+    <!-- Content -->
+    <TabPane fx:id="reportTabPane" VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" styleClass="card" style="-fx-padding: 0;">
+        <tabs>
+            <!-- 1. Báo cáo doanh thu -->
+            <Tab text="Doanh Thu &amp; Lợi Nhuận">
+                <VBox spacing="15.0">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <HBox alignment="CENTER_LEFT">
+                         <Label text="Tổng quan doanh thu theo ngày" style="-fx-font-weight: bold; -fx-font-size: 16;" />
+                         <Region HBox.hgrow="ALWAYS" />
+                         <Button onAction="#exportRevenue" styleClass="btn-secondary" text="📥 Xuất Excel" />
+                    </HBox>
+                    <TableView fx:id="revenueTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colRevDate" prefWidth="150.0" text="Ngày" />
+                            <TableColumn fx:id="colRevOrders" prefWidth="100.0" text="Số Đơn" />
+                            <TableColumn fx:id="colRevRevenue" prefWidth="150.0" text="Doanh Thu" />
+                            <TableColumn fx:id="colRevCost" prefWidth="150.0" text="Tiền Vốn" />
+                            <TableColumn fx:id="colRevProfit" prefWidth="150.0" text="Lợi Nhuận" />
+                        </columns>
+                        <placeholder><Label text="Chọn khoảng thời gian và nhấn Xem Báo Cáo" /></placeholder>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- 2. Top sản phẩm -->
+            <Tab text="Sản Phẩm Bán Chạy">
+                <VBox spacing="15.0">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <HBox alignment="CENTER_LEFT">
+                         <Label text="Xếp hạng sản phẩm theo doanh thu" style="-fx-font-weight: bold; -fx-font-size: 16;" />
+                         <Region HBox.hgrow="ALWAYS" />
+                         <Button onAction="#exportTopProducts" styleClass="btn-secondary" text="📥 Xuất Excel" />
+                    </HBox>
+                    <TableView fx:id="topProductTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colProdName" prefWidth="300.0" text="Tên Sản Phẩm" />
+                            <TableColumn fx:id="colProdQty" prefWidth="100.0" text="Số Lượng" />
+                            <TableColumn fx:id="colProdRevenue" prefWidth="150.0" text="Doanh Thu" />
+                            <TableColumn fx:id="colProdProfit" prefWidth="150.0" text="Lợi Nhuận" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- 3. Tồn kho thấp -->
+            <Tab text="Cảnh Báo Tồn Kho">
+                <VBox spacing="15.0">
+                    <padding><Insets top="15" right="15" bottom="15" left="15"/></padding>
+                    <HBox alignment="CENTER_LEFT">
+                         <Label text="Sản phẩm dưới ngưỡng tồn kho (Threshold: 10)" style="-fx-font-weight: bold; -fx-font-size: 16;" />
+                         <Region HBox.hgrow="ALWAYS" />
+                         <Button onAction="#exportLowStock" styleClass="btn-secondary" text="📥 Xuất Excel" />
+                    </HBox>
+                    <TableView fx:id="lowStockTable" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colStockName" prefWidth="300.0" text="Tên Sản Phẩm" />
+                            <TableColumn fx:id="colStockBarcode" prefWidth="150.0" text="Mã Vạch" />
+                            <TableColumn fx:id="colStockQty" prefWidth="150.0" text="Số Lượng Tồn" />
+                        </columns>
+                    </TableView>
+                </VBox>
+            </Tab>
+        </tabs>
+    </TabPane>
+</VBox>

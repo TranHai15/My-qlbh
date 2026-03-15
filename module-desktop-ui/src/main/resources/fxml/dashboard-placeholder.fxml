@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: transparent;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label text="🌸" style="-fx-font-size: 80;" />
+    
+    <Label text="Camellia Dashboard" textFill="#5D4037">
+        <font>
+            <Font name="System Bold" size="32.0" />
+        </font>
+    </Label>
+    
+    <Label text="Chào mừng bạn đến với hệ thống quản trị Camellia." textFill="#A88181">
+        <font>
+            <Font size="16.0" />
+        </font>
+    </Label>
+
+    <HBox alignment="CENTER" spacing="30.0">
+        <VBox alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20; -fx-pref-width: 150; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
+            <Label text="Sản phẩm" textFill="#7F8C8D" />
+            <Label text="0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #D83367;" />
+        </VBox>
+        <VBox alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20; -fx-pref-width: 150; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
+            <Label text="Doanh thu ngày" textFill="#7F8C8D" />
+            <Label text="0 ₫" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2ECC71;" />
+        </VBox>
+        <VBox alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 15; -fx-padding: 20; -fx-pref-width: 150; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);">
+            <Label text="Đơn hàng mới" textFill="#7F8C8D" />
+            <Label text="0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #F39C12;" />
+        </VBox>
+    </HBox>
+</VBox>

@@ -1,34 +1,25 @@
-# 📋 Lộ trình triển khai module-core
+# Nhiệm vụ: Triển khai Module Quản lý Khách hàng (module-customer)
 
-- [x] **Bước 1: Cấu hình Gradle & Khởi tạo cấu trúc thư mục**
-    - [x] Cập nhật `settings.gradle`.
-    - [x] Tạo `module-core/build.gradle`.
-    - [x] Tạo cấu trúc package `com.grocerypos.core`.
+## 1. Chuẩn bị cấu trúc
+- [x] Tạo package `com.grocerypos.customer` và các sub-packages.
 
-- [x] **Bước 2: Triển khai Base Classes**
-    - [x] `BaseEntity.java`: Chứa các trường id, createdAt, updatedAt.
-    - [x] `BaseRepository.java`: Cung cấp các helper methods cho JDBC/HikariCP.
+## 2. Thực thể (Entities)
+- [x] Tạo `Customer.java`.
+- [x] Tạo `DebtRecord.java`.
+- [x] Tạo `DebtType.java`.
 
-- [x] **Bước 3: Triển khai Exception System**
-    - [x] `AppException.java` (Base).
-    - [x] `ValidationException.java`.
-    - [x] `ResourceNotFoundException.java`.
+## 3. Kho lưu trữ (Repositories)
+- [x] Tạo `CustomerRepository.java`.
+- [x] Tạo `DebtRepository.java`.
 
-- [x] **Bước 4: Triển khai Utils (Tiện ích)**
-    - [x] `MoneyUtils.java`, `DateTimeUtils.java`, `PasswordUtils.java`, `StringUtils.java`.
+## 4. Dịch vụ (Services)
+- [x] Tạo `CustomerService.java` & `DebtService.java` (Interfaces).
+- [x] Tạo `CustomerServiceImpl.java` & `DebtServiceImpl.java`.
 
-- [x] **Bước 5: Cấu hình Hệ thống (Config)**
-    - [x] `DatabaseConfig.java`: Khởi tạo HikariCP và kết nối SQLite.
-    - [x] `EventBus.java`: Wrapper cho Guava EventBus để giao tiếp giữa các module.
+## 5. Kiểm tra và Hoàn thiện
+- [x] Viết Unit Test cho `CustomerService` và `DebtService`.
+- [x] Cập nhật `tasks/lessons.md`.
 
-- [x] **Bước 6: Quản lý Phiên làm việc (Session)**
-    - [x] `UserSession.java` và `SessionManager.java`.
-
-- [x] **Bước 7: Kiểm chứng (Verification)**
-    - [x] Chạy `./gradlew :module-core:build`.
-
-- [ ] **Bước 8: Triển khai AuthService (Đăng nhập)**
-    - [ ] `AuthService.java`: Interface định nghĩa login/logout.
-    - [ ] `AuthRepository.java`: Truy vấn mật khẩu admin từ bảng `settings`.
-    - [ ] `AuthServiceImpl.java`: Logic kiểm tra mật khẩu và gọi SessionManager.
-    - [ ] `AuthServiceTest.java`: Unit test cho chức năng đăng nhập.
+## Kết quả
+- Module hoạt động ổn định, các chức năng CRUD khách hàng và quản lý công nợ đã được kiểm chứng.
+- Đảm bảo tính Atomic cho các giao dịch liên quan đến tiền bạc.

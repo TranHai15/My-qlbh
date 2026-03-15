@@ -1,73 +1,161 @@
-/* camellia-theme.css - Cảm hứng Hoa Anh Đào Nhật Bản */
+/* camellia-theme.css - Hiện Đại & Tối Giản */
 
 .root {
-    -fx-primary-pink: #FFB7C5;        /* Hồng anh đào */
-    -fx-secondary-pink: #FFD1DC;
-    -fx-accent-pink: #D83367;         /* Hồng đậm điểm nhấn */
-    -fx-bg-cream: #FFF9F9;            /* Trắng kem */
-    -fx-text-main: #5D4037;           /* Nâu gỗ đậm cho chữ */
+    -fx-primary: #D83367;
+    -fx-primary-light: #FFB7C5;
+    -fx-bg: #FDFDFD;
+    -fx-sidebar-bg: #FFFFFF;
+    -fx-text: #2C3E50;
+    -fx-text-muted: #7F8C8D;
     -fx-white: #FFFFFF;
+    -fx-border: #ECF0F1;
 }
 
 /* Kiểu chữ tiêu đề */
-.app-title {
-    -fx-font-family: "System";
+.title-main {
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-font-size: 36px;
-    -fx-text-fill: -fx-accent-pink;
+    -fx-text-fill: -fx-primary;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+    -fx-background-color: -fx-sidebar-bg;
+    -fx-padding: 20 0 20 0;
+    -fx-border-color: transparent -fx-border transparent transparent;
+    -fx-border-width: 0 1 0 0;
+}
+
+.nav-item {
+    -fx-background-color: transparent;
+    -fx-padding: 12 25 12 25;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER_LEFT;
+    -fx-transition: 0.3s;
+}
+
+.nav-item:hover {
+    -fx-background-color: #FFF5F7;
+}
+
+.nav-item-active {
+    -fx-background-color: #FFF0F3;
+    -fx-border-color: transparent transparent transparent -fx-primary;
+    -fx-border-width: 0 0 0 4;
+}
+
+.nav-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: -fx-text;
+}
+
+.nav-item-active .nav-label {
+    -fx-text-fill: -fx-primary;
+    -fx-font-weight: bold;
 }
 
 /* Card Container */
 .card {
     -fx-background-color: -fx-white;
-    -fx-background-radius: 20;
-    -fx-effect: dropshadow(three-pass-box, rgba(216, 51, 103, 0.15), 15, 0, 0, 5);
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 5);
 }
 
-/* Input Fields */
-.text-input {
+/* Form Controls */
+.text-field, .text-area, .combo-box {
     -fx-background-color: -fx-white;
-    -fx-background-radius: 10;
-    -fx-border-color: -fx-secondary-pink;
-    -fx-border-radius: 10;
-    -fx-border-width: 1;
-    -fx-padding: 10;
+    -fx-border-color: #DCDDE1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 10 12;
+    -fx-font-size: 14px;
 }
 
-.text-input:focused {
-    -fx-border-color: -fx-accent-pink;
-    -fx-border-width: 1.5;
+.text-field:focused, .combo-box:focused {
+    -fx-border-color: -fx-primary;
 }
 
-/* Button chính (Màu hồng anh đào) */
+/* Buttons */
 .btn-primary {
-    -fx-background-color: linear-gradient(to right, #FFB7C5, #FFD1DC);
-    -fx-text-fill: -fx-text-main;
-    -fx-background-radius: 25;
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
     -fx-font-weight: bold;
+    -fx-padding: 10 25;
     -fx-cursor: hand;
 }
 
 .btn-primary:hover {
-    -fx-background-color: linear-gradient(to right, #FFB7C5, #D83367);
-    -fx-text-fill: white;
+    -fx-background-color: #C02E5C;
 }
 
-/* Button Menu (Dạng Card lớn) */
-.btn-menu {
-    -fx-background-color: -fx-white;
-    -fx-background-radius: 20;
-    -fx-padding: 30;
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -fx-text-muted;
+    -fx-border-color: -fx-text-muted;
+    -fx-border-radius: 8;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 10, 0, 0, 4);
+}
+
+/* Table Design */
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #F8F9FA;
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 10 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -fx-border transparent;
+    -fx-padding: 5 0;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #FDF1F5;
+}
+
+/* --- Style riêng cho Menu Lựa Chọn --- */
+.btn-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 30;
+    -fx-padding: 40;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 25, 0, 0, 10);
+    -fx-border-color: #FDF1F5;
+    -fx-border-radius: 30;
+    -fx-border-width: 1;
 }
 
 .btn-menu:hover {
-    -fx-background-color: -fx-secondary-pink;
-    -fx-scale-x: 1.05;
-    -fx-scale-y: 1.05;
+    -fx-background-color: linear-gradient(to bottom, #FFFFFF, #FFF9FA);
+    -fx-effect: dropshadow(three-pass-box, rgba(216, 51, 103, 0.12), 40, 0, 0, 15);
 }
 
-.icon-label {
-    -fx-font-size: 50px;
+.icon-circle-pos {
+    -fx-fill: linear-gradient(to bottom right, #1ABC9C, #16A085);
+}
+
+.icon-circle-admin {
+    -fx-fill: linear-gradient(to bottom right, #D83367, #C02E5C);
+}
+
+.menu-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.menu-desc {
+    -fx-text-fill: #7F8C8D;
+    -fx-font-size: 14px;
 }

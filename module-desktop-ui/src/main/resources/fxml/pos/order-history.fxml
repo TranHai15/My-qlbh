@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.grocerypos.ui.controllers.pos.OrderHistoryController">
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+    </padding>
+
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <Label text="LỊCH SỬ BÁN HÀNG">
+            <font><Font name="System Bold" size="24.0"/></font>
+        </Label>
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="+ TẠO HÓA ĐƠN MỚI" onAction="#goToPOS" prefHeight="45.0" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+    </HBox>
+
+    <HBox spacing="10.0" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="Tìm mã hóa đơn..." prefWidth="300.0"/>
+        <DatePicker fx:id="datePicker" promptText="Lọc theo ngày" />
+        <Button text="Làm mới" onAction="#loadData" />
+    </HBox>
+
+    <TableView fx:id="orderTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colCode" text="Mã hóa đơn" prefWidth="150.0"/>
+            <TableColumn fx:id="colDate" text="Thời gian" prefWidth="180.0"/>
+            <TableColumn fx:id="colCustomer" text="Khách hàng" prefWidth="200.0"/>
+            <TableColumn fx:id="colTotal" text="Tổng tiền" prefWidth="150.0"/>
+            <TableColumn fx:id="colStatus" text="Trạng thái" prefWidth="100.0"/>
+            <TableColumn fx:id="colActions" text="Thao tác" prefWidth="150.0"/>
+        </columns>
+    </TableView>
+</VBox>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="25.0" style="-fx-background-color: transparent;" 
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.grocerypos.ui.controllers.SupplierController">
+    
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+    </padding>
+
+    <!-- Header -->
+    <HBox alignment="CENTER_LEFT" spacing="20.0">
+        <VBox HBox.hgrow="ALWAYS">
+            <Label text="Đối Tác Nhà Cung Cấp" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+            <Label text="Quản lý thông tin các đơn vị cung cấp hàng hóa" style="-fx-text-fill: #7F8C8D;" />
+        </VBox>
+        <Button onAction="#handleAdd" styleClass="btn-primary" text="+ Thêm nhà cung cấp" prefHeight="45.0" />
+    </HBox>
+
+    <!-- Bảng dữ liệu -->
+    <VBox VBox.vgrow="ALWAYS" styleClass="card" style="-fx-padding: 0;">
+        <TableView fx:id="supplierTable" VBox.vgrow="ALWAYS" style="-fx-background-radius: 12;">
+            <columns>
+                <TableColumn fx:id="colId" prefWidth="60.0" text="ID" />
+                <TableColumn fx:id="colName" prefWidth="250.0" text="Tên nhà cung cấp" />
+                <TableColumn fx:id="colPhone" prefWidth="150.0" text="Số điện thoại" />
+                <TableColumn fx:id="colEmail" prefWidth="200.0" text="Email" />
+                <TableColumn fx:id="colAddress" prefWidth="300.0" text="Địa chỉ" />
+                <TableColumn fx:id="colAction" prefWidth="120.0" text="Thao tác" />
+            </columns>
+            <placeholder>
+                <Label text="Chưa có thông tin nhà cung cấp." />
+            </placeholder>
+        </TableView>
+    </VBox>
+</VBox>
