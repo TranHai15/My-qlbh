@@ -7,6 +7,15 @@ application {
 }
 
 dependencies {
+    // Cac thu vien hinh anh
     implementation "com.google.zxing:core:${zxingVersion}"
     implementation "com.google.zxing:javase:${zxingVersion}"
+
+    // Module core can thay cac module khac de khoi tao DB cho cac bang tuong ung
+    implementation project(':module-product')
+    implementation project(':module-customer')
+    implementation project(':module-order')
+    implementation project(':module-promotion')
+    implementation project(':module-inventory')
+    implementation project(':module-report')
 }
