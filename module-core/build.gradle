@@ -3,7 +3,7 @@ plugins {
 }
 
 application {
-    mainClass = project.hasProperty('mainClass') ? project.getProperty('mainClass') : 'com.grocerypos.core.LoginTester'
+    mainClass = 'com.grocerypos.core.DataSeeder'
 }
 
 dependencies {

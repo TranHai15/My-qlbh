@@ -19,23 +19,34 @@ public class DataSeeder {
         // DatabaseUpdater.main có thể gọi shutdown(), cần initialize lại
         DatabaseConfig.initialize();
         
-        String projectRoot = System.getProperty("user.dir");
-        java.io.File sqlFile = new java.io.File(projectRoot, "seed_data.sql");
+        // Tìm file seed_data.sql thông minh hơn
+        java.io.File sqlFile = new java.io.File("module-core/seed_data.sql");
+        if (!sqlFile.exists()) {
+            sqlFile = new java.io.File("seed_data.sql"); // Truong hop chay tu module-core
+        }
         
-        System.out.println("Đang tìm file SQL tại: " + sqlFile.getAbsolutePath());
+        System.out.println("Dang nap du lieu tu: " + sqlFile.getAbsolutePath());
         
         try (Connection conn = DatabaseConfig.getConnection()) {
+            if (!sqlFile.exists()) {
+                throw new java.io.FileNotFoundException("Khong tim thay file seed_data.sql! Hay dam bao ban dang o thu muc goc cua du an.");
+            }
             String sql = Files.readString(sqlFile.toPath());
             String[] statements = sql.split(";");
             
             Statement stmt = conn.createStatement();
             for (String s : statements) {
                 if (!s.trim().isEmpty()) {
+                    String cmd = s.trim();
+                    // Tu dong chuyen INSERT thanh INSERT OR IGNORE de tranh loi trung lap khi chay lai setup
+                    if (cmd.toUpperCase().startsWith("INSERT INTO")) {
+                        cmd = cmd.replaceFirst("(?i)INSERT INTO", "INSERT OR IGNORE INTO");
+                    }
                     try {
-                        stmt.execute(s.trim());
+                        stmt.execute(cmd);
                     } catch (Exception e) {
-                        System.err.println("CRITICAL ERROR executing: " + s.trim());
-                        throw e; // Rethrow to stop execution
+                        System.err.println("Loi thuc thi cau lenh: " + cmd);
+                        // Khong nem loi de tiep tuc cac cau lenh khac
                     }
                 }
             }
