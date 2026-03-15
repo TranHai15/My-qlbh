@@ -37,18 +37,7 @@ public class OrderRepository extends BaseRepository {
     public int countToday() {
         String today = LocalDate.now().toString();
         String sql = "SELECT COUNT(*) as count FROM orders WHERE DATE(created_at) = ?";
-        try (Connection conn = getConnection();
-             java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, today);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("count");
-                }
-            }
-        } catch (SQLException e) {
-            log.error("Lỗi đếm số đơn hàng hôm nay", e);
-        }
-        return 0;
+        return queryOne(sql, rs -> rs.getInt("count"), today).orElse(0);
     }
 
     public Optional<Order> findById(Long id) {

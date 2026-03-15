@@ -18,8 +18,8 @@ public class MenuController extends BaseController {
 
     @FXML
     private void openPOS() {
-        log.info("Chuyển sang màn hình Bán hàng (POS)...");
-        NavigationHelper.navigateTo("pos/pos-view.fxml");
+        log.info("Chuyển sang màn hình Lịch sử bán hàng (POS)...");
+        NavigationHelper.navigateTo("pos/order-history.fxml");
     }
 
     @FXML

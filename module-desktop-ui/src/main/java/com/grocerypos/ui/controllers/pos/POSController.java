@@ -1,5 +1,10 @@
 package com.grocerypos.ui.controllers.pos;
 
+import com.google.zxing.BinaryBitmap;
+import com.google.zxing.MultiFormatReader;
+import com.google.zxing.Result;
+import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
+import com.google.zxing.common.HybridBinarizer;
 import com.grocerypos.core.exception.AppException;
 import com.grocerypos.core.util.MoneyUtils;
 import com.grocerypos.customer.entity.Customer;
@@ -15,6 +20,7 @@ import com.grocerypos.promotion.service.DiscountEngine;
 import com.grocerypos.ui.AppContext;
 import com.grocerypos.ui.controllers.BaseController;
 import com.grocerypos.ui.utils.AlertHelper;
+import com.grocerypos.ui.utils.NavigationHelper;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -25,15 +31,23 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Optional;
 
 public class POSController extends BaseController {
+    private static final Logger log = LoggerFactory.getLogger(POSController.class);
 
     @FXML private TextField barcodeField;
     @FXML private TextField searchField;
     @FXML private Label customerLabel;
+    @FXML private Label pointsLabel;
     @FXML private TableView<CartItem> cartTable;
     @FXML private TableColumn<CartItem, Number> colIndex;
     @FXML private TableColumn<CartItem, String> colName;
@@ -46,6 +60,9 @@ public class POSController extends BaseController {
     @FXML private Label subtotalLabel;
     @FXML private Label discountLabel;
     @FXML private Label totalAmountLabel;
+    @FXML private Label expectedPointsLabel;
+    @FXML private Label availablePointsLabel;
+    @FXML private TextField usePointsField;
     @FXML private TextField amountPaidField;
     @FXML private Label changeAmountLabel;
     @FXML private Button btnCheckout;
@@ -58,7 +75,8 @@ public class POSController extends BaseController {
     private Cart cart = new Cart();
     private ObservableList<CartItem> cartItems = FXCollections.observableArrayList();
     private Customer currentCustomer = null;
-    private double currentDiscount = 0;
+    private double promoDiscount = 0;
+    private double pointsToUse = 0;
 
     @FXML
     public void initialize() {
@@ -70,47 +88,33 @@ public class POSController extends BaseController {
 
     private void setupTable() {
         cartTable.setItems(cartItems);
-        
         colIndex.setCellValueFactory(column-> new ReadOnlyObjectWrapper<>(cartTable.getItems().indexOf(column.getValue()) + 1));
         colName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduct().getName()));
         colPrice.setCellValueFactory(data -> new SimpleStringProperty(MoneyUtils.formatVND(data.getValue().getUnitPrice())));
         colDiscount.setCellValueFactory(data -> new SimpleStringProperty(MoneyUtils.formatVND(data.getValue().getItemDiscount())));
         colTotal.setCellValueFactory(data -> new SimpleStringProperty(MoneyUtils.formatVND(data.getValue().getLineTotal())));
 
-        // Cột Số lượng: [ - ] [ 1 ] [ + ]
         colQuantity.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
         colQuantity.setCellFactory(param -> new TableCell<>() {
             private final Button btnMinus = new Button("-");
             private final TextField txtQty = new TextField();
             private final Button btnPlus = new Button("+");
             private final HBox container = new HBox(5, btnMinus, txtQty, btnPlus);
-
             {
                 container.setAlignment(Pos.CENTER);
                 txtQty.setPrefWidth(50);
                 txtQty.setAlignment(Pos.CENTER);
                 btnMinus.setOnAction(e -> updateQty(getItem(), -1));
                 btnPlus.setOnAction(e -> updateQty(getItem(), 1));
-                txtQty.setOnAction(e -> {
-                    try {
-                        double val = Double.parseDouble(txtQty.getText());
-                        setQty(getItem(), val);
-                    } catch (Exception ex) { txtQty.setText(String.valueOf(getItem().getQuantity())); }
-                });
             }
-
             @Override
             protected void updateItem(CartItem item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) setGraphic(null);
-                else {
-                    txtQty.setText(String.valueOf(item.getQuantity()));
-                    setGraphic(container);
-                }
+                else { txtQty.setText(String.format("%.1f", item.getQuantity())); setGraphic(container); }
             }
         });
 
-        // Cột Xóa
         colActions.setCellValueFactory(data -> new ReadOnlyObjectWrapper<>(data.getValue()));
         colActions.setCellFactory(param -> new TableCell<>() {
             private final Button btnDel = new Button("Xóa");
@@ -134,14 +138,9 @@ public class POSController extends BaseController {
     private void updateQty(CartItem item, double delta) {
         if (item == null) return;
         double newQty = item.getQuantity() + delta;
-        setQty(item, newQty);
-    }
-
-    private void setQty(CartItem item, double newQty) {
         if (newQty <= 0) return;
-        // Kiểm tra tồn kho
         if (newQty > item.getProduct().getStockQuantity()) {
-            AlertHelper.showWarning("Hết hàng", "Sản phẩm chỉ còn " + item.getProduct().getStockQuantity() + " trong kho.");
+            AlertHelper.showWarning("Hết hàng", "Sản phẩm chỉ còn " + item.getProduct().getStockQuantity());
             return;
         }
         item.setQuantity(newQty);
@@ -160,6 +159,20 @@ public class POSController extends BaseController {
             if (!keyword.isEmpty()) { searchAndAddProduct(keyword); searchField.clear(); }
         });
 
+        usePointsField.textProperty().addListener((obs, oldVal, newVal) -> {
+            try {
+                if (newVal.isEmpty()) pointsToUse = 0;
+                else {
+                    pointsToUse = Double.parseDouble(newVal);
+                    if (currentCustomer != null && pointsToUse > currentCustomer.getRewardPoints()) {
+                        pointsToUse = currentCustomer.getRewardPoints();
+                        usePointsField.setText(String.valueOf(pointsToUse));
+                    }
+                }
+                updateSummary();
+            } catch (Exception e) { pointsToUse = 0; }
+        });
+
         amountPaidField.textProperty().addListener((obs, oldVal, newVal) -> calculateChange());
 
         barcodeField.sceneProperty().addListener((obs, oldScene, newScene) -> {
@@ -169,79 +182,76 @@ public class POSController extends BaseController {
                     else if (event.getCode() == KeyCode.F2) searchField.requestFocus();
                     else if (event.getCode() == KeyCode.F3) onSelectCustomer();
                     else if (event.getCode() == KeyCode.F12) onCheckout();
-                    else if (event.getCode() == KeyCode.DELETE) removeItem();
+                    else if (event.getCode() == KeyCode.ESCAPE) onBackToHistory();
                 });
             }
         });
     }
 
-    private void searchAndAddProduct(String keyword) {
-        runInBackground(
-            () -> productService.search(keyword, null),
-            products -> {
-                if (products.isEmpty()) AlertHelper.showWarning("Tìm kiếm", "Không tìm thấy sản phẩm: " + keyword);
-                else addProduct(products.get(0));
-            },
-            e -> AlertHelper.showError("Lỗi", e.getMessage())
-        );
-    }
-
     private void addProductByBarcode(String barcode) {
         runInBackground(
-            () -> productService.findByBarcode(barcode).orElseThrow(() -> new AppException("Không tìm thấy mã vạch: " + barcode)),
+            () -> productService.findByBarcode(barcode).orElseThrow(() -> new AppException("Mã không tồn tại: " + barcode)),
             this::addProduct,
             e -> AlertHelper.showError("Lỗi", e.getMessage())
         );
     }
 
-    private void addProduct(Product product) {
-        if (product.getStockQuantity() <= 0) {
-            AlertHelper.showError("Hết hàng", "Sản phẩm đã hết tồn kho!");
-            return;
-        }
-        Optional<CartItem> existing = cart.getItems().stream()
-                .filter(item -> item.getProduct().getId().equals(product.getId()))
-                .findFirst();
-
-        if (existing.isPresent()) {
-            updateQty(existing.get(), 1);
-        } else {
-            CartItem item = new CartItem(product, 1);
-            cart.addItem(item);
-            cartItems.add(item);
-        }
-        updateSummary();
+    private void searchAndAddProduct(String keyword) {
+        runInBackground(
+            () -> productService.search(keyword, null),
+            products -> { if (!products.isEmpty()) addProduct(products.get(0)); },
+            e -> {}
+        );
     }
 
-    private void removeItem() {
-        CartItem selected = cartTable.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            cart.getItems().remove(selected);
-            cartItems.remove(selected);
-            updateSummary();
-        }
+    private void addProduct(Product product) {
+        if (product.getStockQuantity() <= 0) { AlertHelper.showError("Hết hàng", "Sản phẩm đã hết!"); return; }
+        Optional<CartItem> existing = cart.getItems().stream().filter(i -> i.getProduct().getId().equals(product.getId())).findFirst();
+        if (existing.isPresent()) updateQty(existing.get(), 1);
+        else { CartItem item = new CartItem(product, 1); cart.addItem(item); cartItems.add(item); }
+        updateSummary();
     }
 
     private void updateSummary() {
         double subtotal = cart.getSubtotal();
         DiscountResult dr = discountEngine.calculate(cart, currentCustomer);
-        currentDiscount = dr.getDiscountAmount();
-        double total = Math.max(0, subtotal - currentDiscount);
+        promoDiscount = dr.getDiscountAmount();
+        
+        if (currentCustomer == null) {
+            pointsToUse = 0;
+            usePointsField.clear();
+        }
+
+        // Quy đổi điểm -> Tiền giảm giá: 1 điểm = 1,000đ
+        double pointMoney = pointsToUse * 1000;
+        double total = Math.max(0, subtotal - promoDiscount - pointMoney);
 
         subtotalLabel.setText(MoneyUtils.formatVND(subtotal));
-        discountLabel.setText(MoneyUtils.formatVND(currentDiscount));
+        discountLabel.setText(MoneyUtils.formatVND(promoDiscount + pointMoney));
         totalAmountLabel.setText(MoneyUtils.formatVND(total));
+        
+        // Dự kiến điểm nhận được: 1% tổng trả / 1000
+        double earnedPoints = Math.floor((total * 0.01) / 1000);
+        expectedPointsLabel.setText(String.format("+ Tích thêm: %,.0f điểm", earnedPoints));
+        
+        if (currentCustomer != null) {
+            availablePointsLabel.setText(String.format("(Có: %,.0f)", currentCustomer.getRewardPoints()));
+            pointsLabel.setText(String.format("Điểm: %,.0f", currentCustomer.getRewardPoints()));
+        } else {
+            availablePointsLabel.setText("(Có: 0)");
+            pointsLabel.setText("Điểm: 0");
+        }
         calculateChange();
     }
 
     private void calculateChange() {
         try {
-            double total = Math.max(0, cart.getSubtotal() - currentDiscount);
+            double pointMoney = pointsToUse * 1000;
+            double total = Math.max(0, cart.getSubtotal() - promoDiscount - pointMoney);
             String input = amountPaidField.getText().trim().replace(",", "");
             double amountPaid = input.isEmpty() ? 0 : Double.parseDouble(input);
-            double change = paymentService.calculateChange(total, amountPaid);
-            changeAmountLabel.setText(MoneyUtils.formatVND(change));
-        } catch (Exception e) { changeAmountLabel.setText("Lỗi"); }
+            changeAmountLabel.setText(MoneyUtils.formatVND(Math.max(0, amountPaid - total)));
+        } catch (Exception e) { changeAmountLabel.setText("0 đ"); }
     }
 
     @FXML
@@ -252,12 +262,14 @@ public class POSController extends BaseController {
             CustomerSearchController controller = loader.getController();
             controller.setOnCustomerSelected(customer -> {
                 this.currentCustomer = customer;
+                this.pointsToUse = 0; // Reset điểm dùng khi đổi khách mới
+                this.usePointsField.clear();
                 this.customerLabel.setText(customer.getName() + " (" + customer.getPhone() + ")");
                 updateSummary();
                 barcodeField.requestFocus();
             });
             Stage stage = new Stage();
-            stage.setTitle("Tìm khách hàng");
+            stage.setTitle("Khách hàng");
             stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
             stage.setScene(new javafx.scene.Scene(root));
             stage.show();
@@ -265,30 +277,63 @@ public class POSController extends BaseController {
     }
 
     @FXML
+    private void onScanQR() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Chọn ảnh QR/Mã vạch");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        File file = fileChooser.showOpenDialog(barcodeField.getScene().getWindow());
+        if (file != null) {
+            try {
+                BufferedImage bufferedImage = ImageIO.read(file);
+                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));
+                Result result = new MultiFormatReader().decode(bitmap);
+                addProductByBarcode(result.getText());
+            } catch (Exception e) { AlertHelper.showError("QR Error", "Không thể đọc mã từ ảnh này."); }
+        }
+    }
+
+    @FXML
+    private void handleUseAllPoints() {
+        if (currentCustomer != null) {
+            // Số điểm tối đa cần dùng (Tổng tiền / 1000)
+            double maxPointsNeeded = Math.floor((cart.getSubtotal() - promoDiscount) / 1000);
+            double pointsToApply = Math.min(currentCustomer.getRewardPoints(), maxPointsNeeded);
+            usePointsField.setText(String.format("%.0f", pointsToApply));
+        }
+    }
+
+    @FXML
     private void onCheckout() {
         if (cart.getItems().isEmpty()) { AlertHelper.showWarning("Lỗi", "Giỏ hàng trống!"); return; }
-        
-        double total = Math.max(0, cart.getSubtotal() - currentDiscount);
+        double pointMoney = pointsToUse * 1000;
+        double total = Math.max(0, cart.getSubtotal() - promoDiscount - pointMoney);
         String input = amountPaidField.getText().trim().replace(",", "");
         double amountPaid = input.isEmpty() ? 0 : Double.parseDouble(input);
 
         if (amountPaid < total && currentCustomer == null) {
-            AlertHelper.showError("Lỗi", "Cần chọn khách quen để ghi nợ!");
+            AlertHelper.showError("Lỗi", "Cần chọn khách hàng để thanh toán.");
             return;
         }
 
         runInBackground(
             () -> {
-                // Toàn bộ logic lưu đơn + thanh toán + ghi nợ chạy trong 1 Transaction tại đây
-                Order order = orderService.createOrder(cart, currentCustomer != null ? currentCustomer.getId() : null, currentDiscount);
-                paymentService.processPayment(order.getId(), amountPaid, currentCustomer != null ? currentCustomer.getId() : null);
-                return order;
+                // Sử dụng phương thức checkout mới để chạy tất cả trong 1 Transaction duy nhất
+                return orderService.checkout(
+                    cart, 
+                    currentCustomer != null ? currentCustomer.getId() : null, 
+                    promoDiscount, 
+                    pointsToUse, 
+                    amountPaid
+                );
             },
             order -> {
                 AlertHelper.showInfo("Thành công", "Đã lưu hóa đơn: " + order.getOrderCode());
                 onCancel();
             },
-            e -> AlertHelper.showError("Lỗi giao dịch", e.getMessage())
+            e -> {
+                log.error("Lỗi giao dịch POS", e);
+                AlertHelper.showError("Lỗi giao dịch", "Không thể hoàn tất thanh toán. Vui lòng kiểm tra lại kết nối.");
+            }
         );
     }
 
@@ -297,11 +342,14 @@ public class POSController extends BaseController {
         cart = new Cart();
         cartItems.clear();
         currentCustomer = null;
+        pointsToUse = 0; // Reset điểm về 0
         customerLabel.setText("Khách vãng lai");
+        usePointsField.clear();
         amountPaidField.clear();
         updateSummary();
         barcodeField.requestFocus();
     }
 
-    @FXML private void onPrintPreview() { AlertHelper.showInfo("In hóa đơn", "Tính năng đang phát triển..."); }
+    @FXML private void onBackToHistory() { NavigationHelper.navigateTo("pos/order-history.fxml"); }
+    @FXML private void onPrintPreview() { AlertHelper.showInfo("In ấn", "Đang in hóa đơn tạm tính..."); }
 }

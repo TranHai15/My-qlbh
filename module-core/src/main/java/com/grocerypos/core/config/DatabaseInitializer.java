@@ -38,11 +38,33 @@ public class DatabaseInitializer {
             String[] commands = sql.split(";");
             for (String command : commands) {
                 if (!command.trim().isEmpty()) {
-                    stmt.execute(command);
+                    try {
+                        stmt.execute(command);
+                    } catch (Exception e) {
+                        // Bỏ qua lỗi nếu là lỗi thêm cột đã tồn tại
+                        if (!e.getMessage().contains("duplicate column name") && !e.getMessage().contains("already exists")) {
+                            log.warn("Lỗi khi chạy lệnh SQL: {} - {}", command.trim(), e.getMessage());
+                        }
+                    }
                 }
             }
             
-            log.info("Khởi tạo schema database thành công.");
+            // Đảm bảo các bảng/cột quan trọng luôn tồn tại (Migration bổ sung)
+            stmt.execute("CREATE TABLE IF NOT EXISTS payments (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "order_id INTEGER NOT NULL REFERENCES orders(id)," +
+                    "method TEXT NOT NULL DEFAULT 'CASH'," +
+                    "amount_paid REAL NOT NULL DEFAULT 0," +
+                    "change_amount REAL NOT NULL DEFAULT 0," +
+                    "is_debt INTEGER NOT NULL DEFAULT 0," +
+                    "created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))" +
+                    ")");
+            
+            try {
+                stmt.execute("ALTER TABLE customers ADD COLUMN reward_points REAL DEFAULT 0");
+            } catch (Exception e) { /* Bỏ qua nếu cột đã tồn tại */ }
+
+            log.info("Khởi tạo/Cập nhật schema database thành công.");
         } catch (Exception e) {
             log.error("Lỗi khi khởi tạo schema database", e);
         }

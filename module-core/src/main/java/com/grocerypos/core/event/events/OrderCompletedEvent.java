@@ -12,4 +12,5 @@ import lombok.Getter;
 public class OrderCompletedEvent implements AppEvent {
     private final Long orderId;
     private final double totalAmount;
+    private final Long customerId;
 }

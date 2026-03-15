@@ -35,7 +35,7 @@ public class DatabaseConfig {
 
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:sqlite:" + dbPath);
-        config.setMaximumPoolSize(5);
+        config.setMaximumPoolSize(10);
         config.setPoolName("GroceryPOS-Pool");
         
         // SQLite optimization theo SKILL-core.md

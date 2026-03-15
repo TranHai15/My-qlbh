@@ -88,6 +88,13 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElse(0.0);
     }
 
+    @Override
+    public void updatePoints(Long customerId, double delta) {
+        if (delta == 0) return;
+        customerRepo.updatePoints(customerId, delta);
+        log.info("Đã cập nhật điểm cho khách hàng ID {}: {}", customerId, delta);
+    }
+
     private void validateCustomer(Customer customer) {
         if (customer.getName() == null || customer.getName().isBlank()) {
             throw new ValidationException("Tên khách hàng không được để trống");

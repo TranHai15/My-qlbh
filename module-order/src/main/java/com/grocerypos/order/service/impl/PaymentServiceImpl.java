@@ -46,14 +46,6 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
         payment = paymentRepo.save(payment);
-
-        // LOGIC TÍCH ĐIỂM (1% giá trị đơn hàng)
-        if (customerId != null) {
-            double earnedPoints = totalAmount * 0.01;
-            customerRepo.updatePoints(customerId, earnedPoints);
-            log.info("Đã tích {} điểm cho khách hàng ID {} từ đơn {}", earnedPoints, customerId, order.getOrderCode());
-        }
-
         return payment;
     }
 

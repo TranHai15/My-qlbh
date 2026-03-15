@@ -8,11 +8,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * Lớp cơ sở cho các Repository, cung cấp các phương thức tiện ích để thao tác với DB.
- * Hỗ trợ Transaction theo yêu cầu của SKILL-core.md.
  */
 public abstract class BaseRepository {
     private static final Logger log = LoggerFactory.getLogger(BaseRepository.class);
@@ -20,20 +18,32 @@ public abstract class BaseRepository {
 
     protected Connection getConnection() throws SQLException {
         Connection conn = threadLocalConn.get();
-        if (conn != null && !conn.isClosed()) {
-            return conn;
+        if (conn != null) {
+            if (!conn.isClosed()) {
+                return conn;
+            }
+            // Nếu kết nối trong ThreadLocal đã đóng, dọn dẹp nó
+            threadLocalConn.remove();
         }
         return DatabaseConfig.getConnection();
+    }
+
+    protected boolean isInTransaction() {
+        try {
+            Connection conn = threadLocalConn.get();
+            return conn != null && !conn.isClosed();
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     /**
      * Thực hiện một nhóm công việc trong một Transaction.
      */
     public <T> T executeInTransaction(TransactionTask<T> task) {
-        Connection existingConn = threadLocalConn.get();
-        if (existingConn != null) {
+        if (isInTransaction()) {
             try {
-                return task.execute(existingConn);
+                return task.execute(threadLocalConn.get());
             } catch (Exception e) {
                 throw (e instanceof RuntimeException) ? (RuntimeException) e : new RuntimeException(e);
             }
@@ -59,7 +69,7 @@ public abstract class BaseRepository {
     }
 
     protected <T> List<T> queryList(String sql, RowMapper<T> mapper, Object... params) {
-        boolean isTransaction = threadLocalConn.get() != null;
+        boolean inTx = isInTransaction();
         Connection conn = null;
         try {
             conn = getConnection();
@@ -67,7 +77,7 @@ public abstract class BaseRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi truy vấn dữ liệu", e);
         } finally {
-            if (!isTransaction && conn != null) {
+            if (!inTx && conn != null) {
                 try { conn.close(); } catch (SQLException e) { log.error("Lỗi đóng kết nối", e); }
             }
         }
@@ -87,7 +97,7 @@ public abstract class BaseRepository {
     }
 
     protected <T> Optional<T> queryOne(String sql, RowMapper<T> mapper, Object... params) {
-        boolean isTransaction = threadLocalConn.get() != null;
+        boolean inTx = isInTransaction();
         Connection conn = null;
         try {
             conn = getConnection();
@@ -95,7 +105,7 @@ public abstract class BaseRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi truy vấn dữ liệu", e);
         } finally {
-            if (!isTransaction && conn != null) {
+            if (!inTx && conn != null) {
                 try { conn.close(); } catch (SQLException e) { log.error("Lỗi đóng kết nối", e); }
             }
         }
@@ -112,7 +122,7 @@ public abstract class BaseRepository {
     }
 
     protected long insert(String sql, Object... params) {
-        boolean isTransaction = threadLocalConn.get() != null;
+        boolean inTx = isInTransaction();
         Connection conn = null;
         try {
             conn = getConnection();
@@ -120,7 +130,7 @@ public abstract class BaseRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi ghi dữ liệu", e);
         } finally {
-            if (!isTransaction && conn != null) {
+            if (!inTx && conn != null) {
                 try { conn.close(); } catch (SQLException e) { log.error("Lỗi đóng kết nối", e); }
             }
         }
@@ -139,7 +149,7 @@ public abstract class BaseRepository {
     }
 
     protected int update(String sql, Object... params) {
-        boolean isTransaction = threadLocalConn.get() != null;
+        boolean inTx = isInTransaction();
         Connection conn = null;
         try {
             conn = getConnection();
@@ -147,7 +157,7 @@ public abstract class BaseRepository {
         } catch (SQLException e) {
             throw new RuntimeException("Lỗi cập nhật dữ liệu", e);
         } finally {
-            if (!isTransaction && conn != null) {
+            if (!inTx && conn != null) {
                 try { conn.close(); } catch (SQLException e) { log.error("Lỗi đóng kết nối", e); }
             }
         }

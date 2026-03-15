@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderService {
-    Order createOrder(Cart cart, Long customerId, double discountAmount);
+    Order createOrder(Cart cart, Long customerId, double discountAmount, double pointsToUse);
+    
+    // Gộp quy trình tạo đơn và thanh toán vào 1 transaction
+    Order checkout(Cart cart, Long customerId, double discountAmount, double pointsToUse, double amountPaid);
+    
     Optional<Order> findById(Long id);
     Optional<Order> findByCode(String code);
     List<Order> findAll();

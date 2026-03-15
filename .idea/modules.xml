@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-order/GroceryPOS.module-order.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-order/GroceryPOS.module-order.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-product/GroceryPOS.module-product.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-product/GroceryPOS.module-product.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-promotion/GroceryPOS.module-promotion.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-promotion/GroceryPOS.module-promotion.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-report/GroceryPOS.module-report.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-report/GroceryPOS.module-report.main.iml" />
     </modules>
   </component>
 </project>

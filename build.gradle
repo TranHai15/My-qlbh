@@ -56,6 +56,10 @@ subprojects {
         compileOnly     "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
+        // QR Code
+        implementation "com.google.zxing:core:${zxingVersion}"
+        implementation "com.google.zxing:javase:${zxingVersion}"
+
         // Test
         testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
         testImplementation "org.mockito:mockito-core:${mockitoVersion}"

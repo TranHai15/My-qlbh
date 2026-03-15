@@ -20,10 +20,12 @@ import java.util.function.Consumer;
 public class CustomerSearchController extends BaseController {
 
     @FXML private TextField searchField;
+    @FXML private TextField newNameField;
+    @FXML private TextField newPhoneField;
     @FXML private TableView<Customer> customerTable;
     @FXML private TableColumn<Customer, String> colName;
     @FXML private TableColumn<Customer, String> colPhone;
-    @FXML private TableColumn<Customer, String> colPoints; // Đổi từ colDebt thành colPoints
+    @FXML private TableColumn<Customer, String> colPoints;
 
     private final CustomerService customerService;
     private final ObservableList<Customer> customerData = FXCollections.observableArrayList();
@@ -58,9 +60,38 @@ public class CustomerSearchController extends BaseController {
         runInBackground(customerService::findAll, customerData::setAll, e -> {});
     }
 
+    @FXML
     private void handleSearch() {
         String keyword = searchField.getText().trim();
         runInBackground(() -> customerService.search(keyword), customerData::setAll, e -> {});
+    }
+
+    @FXML
+    private void handleQuickAdd() {
+        String name = newNameField.getText().trim();
+        String phone = newPhoneField.getText().trim();
+
+        if (name.isEmpty() || phone.isEmpty()) {
+            return;
+        }
+
+        Customer customer = Customer.builder()
+                .name(name)
+                .phone(phone)
+                .rewardPoints(0.0)
+                .active(true)
+                .build();
+
+        runInBackground(
+            () -> customerService.save(customer),
+            newCustomer -> {
+                customerData.add(0, newCustomer);
+                customerTable.getSelectionModel().select(newCustomer);
+                newNameField.clear();
+                newPhoneField.clear();
+            },
+            e -> {}
+        );
     }
 
     @FXML

@@ -77,11 +77,25 @@ CREATE TABLE IF NOT EXISTS customers (
     phone           TEXT    UNIQUE,
     address         TEXT,
     discount_rate   REAL    DEFAULT 0,
+    reward_points   REAL    DEFAULT 0, -- Điểm tích lũy thưởng
     total_debt      REAL    DEFAULT 0,
     notes           TEXT,
     is_active       INTEGER NOT NULL DEFAULT 1,
     created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime')),
     updated_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
+);
+
+-- ------------------------------------------------------------
+-- PAYMENTS — Nhật ký thanh toán
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS payments (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id        INTEGER NOT NULL REFERENCES orders(id),
+    method          TEXT    NOT NULL DEFAULT 'CASH', -- 'CASH' | 'TRANSFER' | 'POINTS'
+    amount_paid     REAL    NOT NULL DEFAULT 0,
+    change_amount   REAL    NOT NULL DEFAULT 0,
+    is_debt         INTEGER NOT NULL DEFAULT 0,
+    created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
 );
 
 -- ------------------------------------------------------------

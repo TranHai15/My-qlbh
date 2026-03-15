@@ -23,4 +23,7 @@ public interface CustomerService {
 
     // --- Discount ---
     double getDiscountRate(Long customerId);        // trả về 0.0 nếu không có
+
+    // --- Reward Points ---
+    void updatePoints(Long customerId, double delta); // Cộng/trừ điểm thưởng
 }

@@ -1,5 +1,7 @@
 package com.grocerypos.ui;
 
+import com.grocerypos.core.event.AppEventBus;
+import com.grocerypos.customer.event.OrderEventListener;
 import com.grocerypos.core.repository.AuthRepository;
 import com.grocerypos.core.service.AuthService;
 import com.grocerypos.core.service.impl.AuthServiceImpl;
@@ -56,10 +58,13 @@ public class AppContext {
             CategoryService categoryService = new CategoryServiceImpl(categoryRepo);
             ProductService productService = new ProductServiceImpl(productRepo);
             CustomerService customerService = new CustomerServiceImpl(customerRepo);
-            OrderService orderService = new OrderServiceImpl(orderRepo, orderItemRepo, productService);
+            OrderService orderService = new OrderServiceImpl(orderRepo, orderItemRepo, productService, customerService);
             
             // PaymentService dùng trực tiếp CustomerRepository để tích điểm
             PaymentService paymentService = new PaymentServiceImpl(paymentRepo, orderService, customerRepo);
+            
+            // Link PaymentService vào OrderService để hỗ trợ Checkout gộp
+            ((com.grocerypos.order.service.impl.OrderServiceImpl)orderService).setPaymentService(paymentService);
             
             DiscountEngine discountEngine = new DiscountEngineImpl();
             InventoryService inventoryService = new InventoryServiceImpl(stockEntryRepo, supplierRepo, productRepo);
@@ -75,6 +80,9 @@ public class AppContext {
             register(DiscountEngine.class, discountEngine);
             register(InventoryService.class, inventoryService);
             register(ReportService.class, reportService);
+
+            // 4. Register Event Listeners
+            AppEventBus.register(new OrderEventListener(customerService));
 
             log.info("Khởi tạo AppContext thành công.");
         } catch (Exception e) {

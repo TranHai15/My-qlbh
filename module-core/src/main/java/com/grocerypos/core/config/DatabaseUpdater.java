@@ -62,6 +62,27 @@ public class DatabaseUpdater {
                     "FOREIGN KEY (product_id) REFERENCES products(id)" +
                     ")");
             
+            // 5. Tạo bảng payments
+            stmt.execute("CREATE TABLE IF NOT EXISTS payments (" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "order_id INTEGER NOT NULL," +
+                    "method TEXT NOT NULL DEFAULT 'CASH'," +
+                    "amount_paid REAL NOT NULL DEFAULT 0," +
+                    "change_amount REAL NOT NULL DEFAULT 0," +
+                    "is_debt INTEGER NOT NULL DEFAULT 0," +
+                    "created_at TEXT NOT NULL DEFAULT (datetime('now','localtime'))," +
+                    "FOREIGN KEY (order_id) REFERENCES orders(id)" +
+                    ")");
+            System.out.println("=> Đã đảm bảo bảng 'payments' tồn tại.");
+
+            // Migration: Thêm reward_points vào bảng customers nếu chưa có
+            try {
+                stmt.execute("ALTER TABLE customers ADD COLUMN reward_points REAL DEFAULT 0");
+                System.out.println("=> Đã cập nhật cột 'reward_points' cho bảng 'customers'.");
+            } catch (Exception e) {
+                // Bỏ qua nếu cột đã tồn tại
+            }
+            
             // Migration: Thêm discount_amount nếu chưa có (trường hợp bảng đã tồn tại từ trước)
             try {
                 stmt.execute("ALTER TABLE order_items ADD COLUMN discount_amount REAL NOT NULL DEFAULT 0");
@@ -70,7 +91,7 @@ public class DatabaseUpdater {
                 // Bỏ qua nếu cột đã tồn tại
             }
             
-            System.out.println("=> Đã đảm bảo bảng 'orders' và 'order_items' tồn tại.");
+            System.out.println("=> Đã đảm bảo bảng 'orders', 'order_items' và 'payments' tồn tại.");
 
         } catch (Exception e) {
             e.printStackTrace();
