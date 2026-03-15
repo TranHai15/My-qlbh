@@ -1,6 +1,7 @@
 plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 javafx {
@@ -22,9 +23,24 @@ dependencies {
     implementation project(':module-report')
 }
 
+// Cấu hình Shadow JAR để nén tất cả thư viện vào 1 file duy nhất
+shadowJar {
+    archiveBaseName.set('GroceryPOS-Desktop')
+    archiveClassifier.set('all')
+    archiveVersion.set('1.0.0')
+
+    // Tự động merge các file dịch vụ (slf4j, v.v.)
+    mergeServiceFiles()
+
+    // Khai báo main class để có thể double-click là chạy
+    manifest {
+        attributes 'Main-Class': 'com.grocerypos.ui.Launcher'
+    }
+}
+
 // Cách đúng để lấy đường dẫn thư viện JavaFX trong Gradle hiện đại
 run {
-    doFirst {
+...
         def jfxLibs = configurations.runtimeClasspath.filter { it.name.contains('javafx') }
         jvmArgs += ["--module-path", jfxLibs.asPath, "--add-modules", "javafx.controls,javafx.fxml,javafx.graphics,javafx.swing"]
     }

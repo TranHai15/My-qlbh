@@ -21,6 +21,7 @@
                 <HBox spacing="5">
                     <TextField fx:id="barcodeField" prefWidth="200.0" promptText="Quét mã..." style="-fx-font-size: 14px;"/>
                     <Button text="📷 Quét QR" onAction="#onScanQR" style="-fx-background-color: #9b59b6; -fx-text-fill: white;"/>
+                    <Button text="🏠 Menu (Esc)" onAction="#onBackToMenu" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;"/>
                 </HBox>
             </VBox>
 

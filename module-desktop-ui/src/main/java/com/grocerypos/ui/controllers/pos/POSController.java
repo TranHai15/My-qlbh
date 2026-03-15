@@ -362,5 +362,6 @@ public class POSController extends BaseController {
     }
 
     @FXML private void onBackToHistory() { NavigationHelper.navigateTo("pos/order-history.fxml"); }
+    @FXML private void onBackToMenu() { NavigationHelper.navigateTo("menu-view.fxml"); }
     @FXML private void onPrintPreview() { AlertHelper.showInfo("In ấn", "Đang in hóa đơn tạm tính..."); }
 }

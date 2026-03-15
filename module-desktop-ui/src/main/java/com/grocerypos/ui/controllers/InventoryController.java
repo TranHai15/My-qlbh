@@ -80,7 +80,10 @@ public class InventoryController extends BaseController {
     }
 
     private void setupTable() {
-        colDate.setCellValueFactory(p -> new ReadOnlyStringWrapper(p.getValue().getEntryDate().format(DATE_FORMATTER)));
+        colDate.setCellValueFactory(p -> {
+            if (p.getValue().getEntryDate() == null) return new ReadOnlyStringWrapper("");
+            return new ReadOnlyStringWrapper(p.getValue().getEntryDate().format(DATE_FORMATTER));
+        });
         colQty.setCellValueFactory(p -> new ReadOnlyStringWrapper(String.format("%,.0f", p.getValue().getQuantity())));
         colCost.setCellValueFactory(p -> new ReadOnlyStringWrapper(MoneyUtils.formatVND(p.getValue().getCostPrice().doubleValue())));
         colTotal.setCellValueFactory(p -> {
@@ -89,9 +92,9 @@ public class InventoryController extends BaseController {
         });
         colNote.setCellValueFactory(new PropertyValueFactory<>("note"));
         
-        // ProductName & SupplierName cần join hoặc load bổ sung, tạm thời hiển thị ID
-        colProductName.setCellValueFactory(p -> new ReadOnlyStringWrapper("SP ID: " + p.getValue().getProductId()));
-        colSupplierName.setCellValueFactory(p -> new ReadOnlyStringWrapper("NCC ID: " + p.getValue().getSupplierId()));
+        // ProductName & SupplierName hiển thị tên thật (lấy từ JOIN)
+        colProductName.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        colSupplierName.setCellValueFactory(new PropertyValueFactory<>("supplierName"));
 
         historyTable.setItems(historyData);
     }
@@ -106,6 +109,7 @@ public class InventoryController extends BaseController {
         entry.setQuantity(new BigDecimal(quantityField.getText()));
         entry.setCostPrice(new BigDecimal(priceField.getText()));
         entry.setNote(noteField.getText());
+        entry.setEntryDate(java.time.LocalDateTime.now()); // Luôn gán ngày nhập hàng hiện tại
 
         runInBackground(
             () -> {

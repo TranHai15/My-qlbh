@@ -10,7 +10,12 @@ import java.util.List;
 public class StockEntryRepository extends BaseRepository {
 
     public List<StockEntry> findAll() {
-        return queryList("SELECT * FROM stock_entries ORDER BY entry_date DESC", this::mapResultSet);
+        String sql = "SELECT s.*, p.name as product_name, sup.name as supplier_name " +
+                     "FROM stock_entries s " +
+                     "LEFT JOIN products p ON s.product_id = p.id " +
+                     "LEFT JOIN suppliers sup ON s.supplier_id = sup.id " +
+                     "ORDER BY s.entry_date DESC";
+        return queryList(sql, this::mapResultSet);
     }
 
     private StockEntry mapResultSet(ResultSet rs) throws SQLException {
@@ -21,9 +26,20 @@ public class StockEntryRepository extends BaseRepository {
         entry.setQuantity(rs.getBigDecimal("quantity"));
         entry.setCostPrice(rs.getBigDecimal("cost_price"));
         
+        // Load transient names
+        entry.setProductName(rs.getString("product_name"));
+        entry.setSupplierName(rs.getString("supplier_name"));
+        
         String entryDate = rs.getString("entry_date");
         if (entryDate != null) {
-            entry.setEntryDate(LocalDateTime.parse(entryDate.replace(" ", "T")));
+            try {
+                // SQLite datetime: YYYY-MM-DD HH:MM:SS
+                entry.setEntryDate(LocalDateTime.parse(entryDate.replace(" ", "T")));
+            } catch (Exception e) {
+                entry.setEntryDate(LocalDateTime.now()); // Fallback
+            }
+        } else {
+            entry.setEntryDate(LocalDateTime.now());
         }
         
         entry.setNote(rs.getString("note"));

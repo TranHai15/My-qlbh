@@ -14,8 +14,17 @@ public class StockEntry extends BaseEntity {
     private BigDecimal costPrice;
     private LocalDateTime entryDate;
     private String note;
+    
+    // Transient
+    private String productName;
+    private String supplierName;
 
     // Getters and Setters
+    public String getProductName() { return productName; }
+    public void setProductName(String productName) { this.productName = productName; }
+    public String getSupplierName() { return supplierName; }
+    public void setSupplierName(String supplierName) { this.supplierName = supplierName; }
+
     public Long getProductId() { return productId; }
     public void setProductId(Long productId) { this.productId = productId; }
     public Long getSupplierId() { return supplierId; }
